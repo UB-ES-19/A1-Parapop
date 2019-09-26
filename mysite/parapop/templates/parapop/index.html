@@ -28,8 +28,13 @@
 							<option value="1">Videojuegos</option>
 							<option value="1">Dipositivos multimedia</option>
 						</select>
-						<a class="ac_btn" href="/login">Iniciar Sesión</a>
-						<a class="dn_btn" href="/register">Regístrate</a>
+						{% if user.is_authenticated %}
+							<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
+							<a class="dn_btn" href="#">Perfil</a>
+						{% else %}
+							<a class="ac_btn" href="/login">Iniciar Sesión</a>
+							<a class="dn_btn" href="/register">Regístrate</a>
+						{% endif %}
 					</div>
            		</div>
            	</div>
@@ -68,7 +73,12 @@
             	<div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
 				<div class="container">
 					<div class="banner_content text-center">
+						{% if user.is_authenticated %}
+						<h3>¿Qué estás buscando hoy, {{request.user.username}} ? </h3>
+
+						{% else %}
 						<h3>¿Qué estás buscando hoy? </h3>
+						{% endif %}
 						<p>Pallapop, la plataforma líder en la compraventa de segunda mano
 							<br>
 						</br>

@@ -15,6 +15,7 @@
 <body>
 
     <!--================Header Menu Area =================-->
+
     <header class="header_area">
         <div class="top_menu row m0">
             <div class="container">
@@ -42,38 +43,19 @@
 
 
     <!--================Home Banner Area =================-->
+
     <section>
-        <div class="container">
-            <div class="text-primary">
-                <h1>Iniciar Sesión</h1>
-            </div>
-								<div class="caja">
-                <form class="formulario">
 
-                    <h3>Email</h3>
-                        <textarea name=""placeholder="Email: ejemplo@gmail.com" id="h"  cols="35"rows="1"></textarea>
+					<form method="POST">
+						{% csrf_token %}
 
-                    <br>
-                    <br>
-
-
-                    <h3>Contraseña</h3>
-                    <textarea name=""placeholder="Contraseña" id="" cols="20" rows="1"></textarea>
-
-										<br>
-										<br>
-
-
-											<a href="index.html" class="crearpeticion blue_btn">Iniciar Sesión</a>
-                            <!--<input class="btn btn-primary" type="button" name="nombre" value= "Guardar" id = "nombre" autocomplete="on" required
-														> -->
-                    </div>
-
-
-                <br><br><br>
+						{{ form }}
+						<div class = "form_group">
+								<button class = "btn btn-outline-info" type = "submit">Login</button>
+						</div>
             </form>
         </div>
-
+			</form>
     </section>
     <!--================End Home Banner Area =================-->
 
