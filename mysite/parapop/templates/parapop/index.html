@@ -30,7 +30,7 @@
 						</select>
 						{% if user.is_authenticated %}
 							<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
-							<a class="dn_btn" href="#">Perfil</a>
+							<a class="dn_btn" href="{% url 'profile' %}">Perfil</a>
 						{% else %}
 							<a class="ac_btn" href="/login">Iniciar Sesión</a>
 							<a class="dn_btn" href="/register">Regístrate</a>
