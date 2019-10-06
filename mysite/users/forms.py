@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import Follow
 
 class UserRegisterForm(UserCreationForm):
 
@@ -14,3 +15,11 @@ class UserRegisterForm(UserCreationForm):
 
 		model = User
 		fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
+class Follow(forms.ModelForm):
+	following =  forms.CharField(label = "Following")
+	follower = forms.CharField(label = "Follower")
+
+	class Meta:
+		model = Follow
+		fields = ['follower', 'following']

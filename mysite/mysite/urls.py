@@ -28,6 +28,7 @@ urlpatterns = [
     path('logout/', log_views.LogoutView.as_view(template_name='parapop/index.html'), name='logout'),
     path('', include('parapop.urls')),
     path('profile/', user_views.profile, name='profile'),
+    path('profile/', user_views.follow, name='follow'),
 ]
 
 if settings.DEBUG:

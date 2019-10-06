@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from .models import Follow
+from .models import Profile
 
 def register(request):
 	if request.method == 'POST':
@@ -26,7 +27,18 @@ def logout(request):
 
 @login_required
 def profile(request):
+	followings = Follow.objects.all()
+	profileUser = Profile.user
+	user = request.user
+	args = {'followings' : followings, 'profileUser': profileUser, 'user':user}
+	return render(request, 'users/profile.html', args)
 
-	return render(request, 'users/profile.html')
+@login_required
+def follow(request):
+	if(request.method == 'POST'):
+		form = FollowForm(request.POST)
+		if form.is_valid:
+			form.save()
+	return render(request, 'users/profile.html', args)
 
 
