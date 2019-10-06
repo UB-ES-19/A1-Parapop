@@ -5,7 +5,7 @@ from .models import Follow
 
 class UserRegisterForm(UserCreationForm):
 
-	email = forms.EmailField(label = "Email")
+	email = forms.EmailField(label = "Email", required=True)
 	first_name = forms.CharField(label = "Nombre")
 	last_name = forms.CharField(label= "Apellido")
 	password1 = forms.CharField(label= "Contraseña", widget = forms.PasswordInput)
@@ -15,6 +15,12 @@ class UserRegisterForm(UserCreationForm):
 
 		model = User
 		fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
+	def clean_email(self):
+		data = self.cleaned_data['email']
+		if User.objects.filter(email=data).exists():
+			raise forms.ValidationError("This email already used")
+		return data
 
 class Follow(forms.ModelForm):
 	following =  forms.CharField(label = "Following")
