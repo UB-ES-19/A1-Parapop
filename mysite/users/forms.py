@@ -22,10 +22,9 @@ class UserRegisterForm(UserCreationForm):
 			raise forms.ValidationError("This email already used")
 		return data
 
-class Follow(forms.ModelForm):
-	following =  forms.CharField(label = "Following")
-	follower = forms.CharField(label = "Follower")
+class FollowAction(forms.ModelForm):
 
 	class Meta:
 		model = Follow
 		fields = ['follower', 'following']
+		widgets = {'follower': forms.HiddenInput(),'following': forms.HiddenInput() }

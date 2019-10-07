@@ -12,6 +12,11 @@
 		      		<p class="text-secondary">{{relation.following.username}}</p>
 		      {% endif %}
 	      {% endfor %}
+	      <form method = "POST">
+	      	{% csrf_token %}
+	      	{{form}}
+	      	<button type="submit">Follow</button>
+	      </form> 
 	    </div>
 	  </div>
 	  <!-- FORM HERE -->

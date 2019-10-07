@@ -9,10 +9,11 @@ class Profile(models.Model):
 		return f'{self.user.username} profile'
 
 class Follow(models.Model):
-	follower = models.ForeignKey(User, related_name="who_is_followed", on_delete = models.CASCADE)
-	following = models.ForeignKey(User, related_name="who_follows", on_delete = models.CASCADE)
+	follower = models.ForeignKey(User, related_name="who_is_followed", on_delete = models.CASCADE, blank = True)
+	following = models.ForeignKey(User, related_name="who_follows", on_delete = models.CASCADE, blank = True)
       
 
 	def __str__(self):
 		return f'{self.follower.username}'
+
 
