@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Follow
 
+
 class UserRegisterForm(UserCreationForm):
 
 	email = forms.EmailField(label = "Email", required=True)
@@ -28,3 +29,5 @@ class FollowAction(forms.ModelForm):
 		model = Follow
 		fields = ['follower', 'following']
 		widgets = {'follower': forms.HiddenInput(),'following': forms.HiddenInput() }
+
+

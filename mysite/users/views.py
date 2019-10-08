@@ -30,7 +30,17 @@ def logout(request):
 @login_required
 def profile(request):
 	followings = Follow.objects.all()
-	args = {'followings' : followings}
+
+	followers_count = 0
+	followings_count = 0
+
+	for relation in followings:
+		if(relation.following.username == request.user.username):
+			followers_count += 1
+		elif(relation.follower.username == request.user.username):
+			followings_count += 1
+
+	args = {'followers_count' : followers_count, 'followings_count' : followings_count}
 
 	return render(request, 'users/profile.html', args)
 
@@ -38,26 +48,71 @@ def profile(request):
 def get_user_profile(request, username):
 
 	user = User.objects.get(username=username)
+
 	if (user == request.user):
 		return redirect('../profile')
+
 	elif request.method == 'POST':
 		form = FollowAction(request.POST)
-		if form.is_valid():
-			print("A")
-			relation = form.save(commit = False)
-			relation.follower = request.user
-			relation.following = user
-			relation.save()
-			followings = Follow.objects.all()
-			args = {'followings' : followings, 'user' : user}
-			return render(request, 'users/user_profile.html', args)
+		if request.POST.get("follow"):
+			if form.is_valid():
+				relation = form.save(commit = False)
+				relation.follower = request.user
+				relation.following = user
+				relation.save()
+
+				followers_count = 0
+				followings_count = 0
+				followings = Follow.objects.all()
+				already_following = False
+				for relation in followings:
+					if(relation.follower.username == request.user.username and relation.following.username == user.username):
+						already_following = True
+
+					if(relation.following.username == user.username):
+						followers_count += 1
+					elif(relation.follower.username == user.username):
+						followings_count += 1
+
+				args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count}
+				return render(request, 'users/user_profile.html', args)
+		else:
+			if form.is_valid():
+
+				Follow.objects.filter(follower = request.user, following = user).delete()
+
+				followers_count = 0
+				followings_count = 0
+				followings = Follow.objects.all()
+				already_following = False
+				for relation in followings:
+					if(relation.follower.username == request.user.username and relation.following.username == user.username):
+						already_following = True
+
+					if(relation.following.username == user.username):
+						followers_count += 1
+					elif(relation.follower.username == user.username):
+						followings_count += 1
+
+				args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count}
+				return render(request, 'users/user_profile.html', args)
 	else:
 		followings = Follow.objects.all()
-		args = {'followings' : followings, 'user' : user}
 		form = FollowAction
 		form.following = user
 		form.follower = request.user 
-		args = {'followings' : followings, 'user' : user,'form' : form}
+
+		followers_count = 0
+		followings_count = 0
+		already_following = False
+		for relation in followings:
+			if(relation.follower.username == request.user.username and relation.following.username == user.username):
+				already_following = True
+
+			if(relation.following.username == user.username):
+				followers_count += 1
+			elif(relation.follower.username == user.username):
+						followings_count += 1
+
+		args = {'followings' : followings, 'user' : user,'form' : form, 'already_following' : already_following, 'followers_count' : followers_count,'followings_count' : followings_count}
 		return render(request, 'users/user_profile.html', args)
-
-

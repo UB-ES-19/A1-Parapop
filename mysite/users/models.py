@@ -17,3 +17,6 @@ class Follow(models.Model):
 		return f'{self.follower.username}'
 
 
+
+
+

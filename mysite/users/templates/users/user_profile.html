@@ -6,16 +6,17 @@
 	      <h2 class="account-heading">{{user.username}}</h2>
 	      <p class="text-secondary">{{user.email}}</p>
 	      <p class="text-secondary">{{user.first_name}} {{user.last_name}}</p>
-	      <p class="text-secondary">Following:</p>
-	      {% for relation in followings %}
-		      {% if relation.follower.username == user.username %}
-		      		<p class="text-secondary">{{relation.following.username}}</p>
-		      {% endif %}
-	      {% endfor %}
+	      <p class="text-secondary">Followers: {{followers_count}}</p>
+	      <p class="text-secondary">Following: {{followings_count}}</p>
+
 	      <form method = "POST">
 	      	{% csrf_token %}
 	      	{{form}}
-	      	<button type="submit">Follow</button>
+	      	{% if already_following %}
+	      		<button name = "unfollow" value = 1 type="submit">Unfollow</button>
+	      	{% else %}
+	      		<button name = "follow" value = 1 type="submit">Follow</button>
+	      	{% endif %}
 	      </form> 
 	    </div>
 	  </div>
