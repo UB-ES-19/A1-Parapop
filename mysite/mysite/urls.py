@@ -29,6 +29,7 @@ urlpatterns = [
     path('logout/', log_views.LogoutView.as_view(template_name='parapop/index.html'), name='logout'),
     path('', include('parapop.urls')),
     path('profile/', user_views.profile, name='profile'),
+    path('products/', user_views.products, name='products'),
     url(r'profile/(?P<username>[a-zA-Z0-9]+)$', user_views.get_user_profile),
 ]
 

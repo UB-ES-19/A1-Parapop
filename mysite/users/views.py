@@ -19,6 +19,11 @@ def register(request):
 		form = UserRegisterForm()
 	return render(request,'users/register.html',{'form': form})
 
+@login_required
+def products(request):
+
+	return render(request, 'users/products.html')
+
 def login(request):
 	return render(request,'users/login.html')
 
@@ -48,7 +53,7 @@ def profile(request):
 def get_user_profile(request, username):
 	try:
 		user = User.objects.get(username=username)
-	
+
 		if (user == request.user):
 			return redirect('../profile')
 
@@ -100,7 +105,7 @@ def get_user_profile(request, username):
 			followings = Follow.objects.all()
 			form = FollowAction
 			form.following = user
-			form.follower = request.user 
+			form.follower = request.user
 
 			followers_count = 0
 			followings_count = 0
@@ -120,4 +125,3 @@ def get_user_profile(request, username):
 		args = {'message_error' : "Usuario no encontrado!", 'is_error' : True}
 
 		return render(request, 'parapop/index.html', args)
-

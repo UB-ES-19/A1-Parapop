@@ -64,7 +64,11 @@
 						<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 							<ul class="nav navbar-nav menu_nav ml-auto">
 								<li class="nav-item"><a class="nav-link" href="#">Vender producto</a></li>
+								{% if user.is_authenticated %}
+								<li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Mis productos</a></li>
+								{% else %}
 								<li class="nav-item"><a class="nav-link" href="#">Mis productos</a></li>
+								{% endif %}
 								<li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
 								<li class="nav-item"><a class="nav-link" href="#">Preguntas Frecuentes</a></li>
 							</ul>
@@ -80,6 +84,7 @@
 
 
         <!--================Home Banner Area =================-->
+
         <section class="home_banner_area">
             <div class="banner_inner d-flex align-items-center">
             	<div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
