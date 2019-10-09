@@ -20,6 +20,21 @@
            	<div class="top_menu row m0">
            		<div class="container">
 					<div class="float-right">
+
+						<form method = "GET">
+							<div id = "user_browser">
+								<div class = "input-group col-md-12">
+									{% if is_error %}
+										{{message_error}}
+									{% endif %}
+									<input type = "text" class = "form-control" placeholder="¿Buscando a alguien?" name = "user_browsed">
+									<span class = "input-group-list">
+										<i class = "icon icon-search"></i>
+										<button type = "submit" class="ac_btn">Buscar</button>
+								</div>
+							</div>
+						</form>
+
 						<select class="lan_pack">
 							<option value="1">Todo</option>
 						<option value="1">Ropa y accesorios</option>
