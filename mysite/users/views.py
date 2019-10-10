@@ -30,7 +30,7 @@ def login(request):
 
 def logout(request):
 	logout(request)
-	return render(request, 'homepage')
+	return redirect('http://localhost:8000')
 
 @login_required
 def profile(request):
@@ -49,7 +49,6 @@ def profile(request):
 
 	return render(request, 'users/profile.html', args)
 
-@login_required
 def get_user_profile(request, username):
 	try:
 		user = User.objects.get(username=username)
@@ -79,7 +78,7 @@ def get_user_profile(request, username):
 						elif(relation.follower.username == user.username):
 							followings_count += 1
 
-					args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count}
+					args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
 					return render(request, 'users/user_profile.html', args)
 			else:
 				if form.is_valid():
@@ -99,7 +98,7 @@ def get_user_profile(request, username):
 						elif(relation.follower.username == user.username):
 							followings_count += 1
 
-					args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count}
+					args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
 					return render(request, 'users/user_profile.html', args)
 		else:
 			followings = Follow.objects.all()
@@ -119,7 +118,7 @@ def get_user_profile(request, username):
 				elif(relation.follower.username == user.username):
 							followings_count += 1
 
-			args = {'followings' : followings, 'user' : user,'form' : form, 'already_following' : already_following, 'followers_count' : followers_count,'followings_count' : followings_count}
+			args = {'followings' : followings, 'user' : user,'form' : form, 'already_following' : already_following, 'followers_count' : followers_count,'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
 			return render(request, 'users/user_profile.html', args)
 	except Exception:
 		args = {'message_error' : "Usuario no encontrado!", 'is_error' : True}
