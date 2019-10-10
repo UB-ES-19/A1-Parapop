@@ -30,7 +30,7 @@
 				<option value="1">Videojuegos</option>
 				<option value="1">Dipositivos multimedia</option>
 			</select>
-			{% if user.is_authenticated %}
+			{% if logged_in %}
 
 			<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
 			<a class="dn_btn" href="{% url 'profile' %}">Perfil</a>
