@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf.urls import url
 from django.contrib.auth import views as log_views
 from users import views as user_views
+from parapop import views as parapop_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,6 +32,7 @@ urlpatterns = [
     path('profile/', user_views.profile, name='profile'),
     path('products/', user_views.products, name='products'),
     url(r'profile/(?P<username>[a-zA-Z0-9]+)$', user_views.get_user_profile),
+    path('sell-product/', parapop_views.sell_product, name='sell_product'),
 ]
 
 if settings.DEBUG:
