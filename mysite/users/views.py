@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Follow
 from .models import Profile
 from django.contrib.auth.models import User
+from parapop import views as parapop_views
 
 def register(request):
 	if request.method == 'POST':
@@ -19,10 +20,6 @@ def register(request):
 		form = UserRegisterForm()
 	return render(request,'users/register.html',{'form': form})
 
-@login_required
-def products(request):
-
-	return render(request, 'users/products.html')
 
 def login(request):
 	return render(request,'users/login.html')
@@ -50,77 +47,81 @@ def profile(request):
 	return render(request, 'users/profile.html', args)
 
 def get_user_profile(request, username):
-	try:
-		user = User.objects.get(username=username)
+	
+	user = User.objects.get(username=username)
 
-		if (user == request.user):
-			return redirect('../profile')
+	if (user == request.user):
+		return redirect('../profile')
 
-		elif request.method == 'POST':
-			form = FollowAction(request.POST)
-			if request.POST.get("follow"):
-				if form.is_valid():
-					relation = form.save(commit = False)
-					relation.follower = request.user
-					relation.following = user
-					relation.save()
+	elif request.method == 'POST':
+		form = FollowAction(request.POST)
+		if request.POST.get("follow"):
+			if form.is_valid():
+				relation = form.save(commit = False)
+				relation.follower = request.user
+				relation.following = user
+				relation.save()
 
-					followers_count = 0
-					followings_count = 0
-					followings = Follow.objects.all()
-					already_following = False
-					for relation in followings:
-						if(relation.follower.username == request.user.username and relation.following.username == user.username):
-							already_following = True
+				followers_count = 0
+				followings_count = 0
+				followings = Follow.objects.all()
+				already_following = False
+				for relation in followings:
+					if(relation.follower.username == request.user.username and relation.following.username == user.username):
+						already_following = True
 
-						if(relation.following.username == user.username):
-							followers_count += 1
-						elif(relation.follower.username == user.username):
-							followings_count += 1
+					if(relation.following.username == user.username):
+						followers_count += 1
+					elif(relation.follower.username == user.username):
+						followings_count += 1
 
-					args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
-					return render(request, 'users/user_profile.html', args)
-			else:
-				if form.is_valid():
-
-					Follow.objects.filter(follower = request.user, following = user).delete()
-
-					followers_count = 0
-					followings_count = 0
-					followings = Follow.objects.all()
-					already_following = False
-					for relation in followings:
-						if(relation.follower.username == request.user.username and relation.following.username == user.username):
-							already_following = True
-
-						if(relation.following.username == user.username):
-							followers_count += 1
-						elif(relation.follower.username == user.username):
-							followings_count += 1
-
-					args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
-					return render(request, 'users/user_profile.html', args)
+				args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
+				return render(request, 'users/user_profile.html', args)
+		elif (request.POST.get("profile_user")):
+			username = request.POST.get("profile_user")
+			return parapop_views.other_user_products(request, username)
 		else:
-			followings = Follow.objects.all()
-			form = FollowAction
-			form.following = user
-			form.follower = request.user
+			if form.is_valid():
 
-			followers_count = 0
-			followings_count = 0
-			already_following = False
-			for relation in followings:
-				if(relation.follower.username == request.user.username and relation.following.username == user.username):
-					already_following = True
+				Follow.objects.filter(follower = request.user, following = user).delete()
 
-				if(relation.following.username == user.username):
-					followers_count += 1
-				elif(relation.follower.username == user.username):
-							followings_count += 1
+				followers_count = 0
+				followings_count = 0
+				followings = Follow.objects.all()
+				already_following = False
+				for relation in followings:
+					if(relation.follower.username == request.user.username and relation.following.username == user.username):
+						already_following = True
 
-			args = {'followings' : followings, 'user' : user,'form' : form, 'already_following' : already_following, 'followers_count' : followers_count,'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
-			return render(request, 'users/user_profile.html', args)
-	except Exception:
-		args = {'message_error' : "Usuario no encontrado!", 'is_error' : True}
+					if(relation.following.username == user.username):
+						followers_count += 1
+					elif(relation.follower.username == user.username):
+						followings_count += 1
 
-		return render(request, 'parapop/index.html', args)
+				args = {'followings' : followings, 'user' : user,'already_following' : already_following,'followers_count' : followers_count, 'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
+				return render(request, 'users/user_profile.html', args)
+	
+	else:
+		followings = Follow.objects.all()
+		form = FollowAction
+		form.following = user
+		form.follower = request.user
+
+		followers_count = 0
+		followings_count = 0
+		already_following = False
+		for relation in followings:
+			if(relation.follower.username == request.user.username and relation.following.username == user.username):
+				already_following = True
+
+			if(relation.following.username == user.username):
+				followers_count += 1
+			elif(relation.follower.username == user.username):
+						followings_count += 1
+
+		args = {'followings' : followings, 'user' : user,'form' : form, 'already_following' : already_following, 'followers_count' : followers_count,'followings_count' : followings_count, 'logged_in':request.user.is_authenticated}
+		return render(request, 'users/user_profile.html', args)
+
+	args = {'message_error' : "Usuario no encontrado!", 'is_error' : True}
+
+	return render(request, 'parapop/index.html', args)

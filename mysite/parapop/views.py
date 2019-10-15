@@ -6,6 +6,8 @@ from users import views as user_views
 from django.views.generic import CreateView
 from .models import ProductPost
 from .forms import SellProduct
+from django.contrib.auth.decorators import login_required
+from users.models import Profile
 
 def home(request):
 	queryset = request.GET.get("user_browsed")
@@ -21,16 +23,23 @@ def home(request):
 
 def sell_product(request):
 	if request.method == 'POST':
-		form = SellProduct(request.POST)
+		form = SellProduct(request.POST, request.FILES)
 		if form.is_valid():	
 			product = form.save(commit = False)
 			product.author = request.user
 			product.save()
 			return redirect('../')
 	else:
-		form = ProductPost
-		args = {'form' : form}
-		return render(request, 'parapop/sell_product.html', args)
+		form = SellProduct()
+		return render(request, 'parapop/sell_product.html', {'form' : form})
 
 
+def products(request):
+	queryset = ProductPost.objects.filter(author = request.user)
+	return render(request, 'parapop/products.html', {'user_products' : queryset})
+
+def other_user_products(request, username):
+	profile_user = User.objects.filter(username = username)
+	queryset = ProductPost.objects.filter(author = profile_user[0])
+	return render(request, 'parapop/products.html', {'user_products' : queryset})
 

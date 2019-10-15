@@ -32,8 +32,10 @@
 			</select>
 			{% if user.is_authenticated %}
 
-			<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
-			<a class="dn_btn" href="{% url 'profile' %}">Perfil</a>
+				<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
+				<select class="lan_pack" onchange="location = this.value ">
+				  <option value="" href="">Personal</option>
+			    <option value="{% url 'products' %}">Productos</option>
 
 				</select>
 			{% else %}
@@ -75,18 +77,8 @@
 		  <p>{{user.email}}</p>
 
 			<p>Seguidores: {{followers_count}}   Seguidos: {{followings_count}}</p>
-			<form method = "POST">
-				{% csrf_token %}
-				{{form}}
-				{% if logged_in %}
-					{% if already_following %}
-						<button name = "unfollow" value = 1 type="submit">Unfollow</button>
-					{% else %}
-						<button name = "follow" value = 1 type="submit">Follow</button>
-					{% endif %}
-				{% endif %}
-				<p><button name ="profile_user" value = "{{user.username}}" type = "submit">Productos</button></p>
-			</form>
+		  <p><button role="link" onclick="window.location='{% url 'products' %}'">Productos</button></p>
+
 		</div>
 		{% endblock content %}
 

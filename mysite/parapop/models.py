@@ -6,7 +6,7 @@ class ProductPost(models.Model):
 	description = models.TextField()
 	price = models.FloatField()
 	author = models.ForeignKey(User, on_delete= models.CASCADE, blank = True)
-	productPic = models.ImageField(default = 'defaultProduct.jpg', upload_to = 'product_pics')
+	productPic = models.FileField(upload_to = 'product_pics/')
 
 	def __str__(self):
 		return self.title

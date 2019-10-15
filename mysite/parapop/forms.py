@@ -7,4 +7,4 @@ class SellProduct(forms.ModelForm):
 
 	class Meta:
 		model = ProductPost
-		fields = ['title', 'description', 'price','productPic', 'author']
+		fields = ('title', 'description', 'price','productPic',)
