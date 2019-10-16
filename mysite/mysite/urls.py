@@ -34,6 +34,7 @@ urlpatterns = [
     path('products/', parapop_views.products, name='products'),
     url(r'profile/(?P<username>[a-zA-Z0-9]+)$', user_views.get_user_profile),
     path('sell-product/', parapop_views.sell_product, name='sell_product'),
+    path('favourites/', parapop_views.favourites, name='favourites'),
 ]
 
 if settings.DEBUG:

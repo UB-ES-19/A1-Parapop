@@ -7,6 +7,7 @@ class ProductPost(models.Model):
 	price = models.FloatField()
 	author = models.ForeignKey(User, on_delete= models.CASCADE, blank = True)
 	productPic = models.FileField(upload_to = 'product_pics/')
+	favUsers = models.ManyToManyField(User, related_name = 'favUsers', blank = True)
 
 	def __str__(self):
 		return self.title

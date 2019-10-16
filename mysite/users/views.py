@@ -79,7 +79,10 @@ def get_user_profile(request, username):
 				return render(request, 'users/user_profile.html', args)
 		elif (request.POST.get("profile_user")):
 			username = request.POST.get("profile_user")
-			return parapop_views.other_user_products(request, username)
+			return parapop_views.other_user_products(request, username, None)
+		elif (request.POST.get("favProduct")):
+			productName = request.POST.get("favProduct")
+			return parapop_views.other_user_products(request, username, productName)
 		else:
 			if form.is_valid():
 

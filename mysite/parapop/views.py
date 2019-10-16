@@ -8,6 +8,7 @@ from .models import ProductPost
 from .forms import SellProduct
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
+from django.shortcuts import get_object_or_404
 
 def home(request):
 	queryset = request.GET.get("user_browsed")
@@ -38,8 +39,17 @@ def products(request):
 	queryset = ProductPost.objects.filter(author = request.user)
 	return render(request, 'parapop/products.html', {'user_products' : queryset})
 
-def other_user_products(request, username):
+def other_user_products(request, username, productName):
+	if(productName != None):
+		product = get_object_or_404(ProductPost, title = productName)
+		if(product.favUsers.filter(id = request.user.id).exists()):
+			product.favUsers.remove(request.user)
+		else:
+			product.favUsers.add(request.user)
 	profile_user = User.objects.filter(username = username)
 	queryset = ProductPost.objects.filter(author = profile_user[0])
-	return render(request, 'parapop/products.html', {'user_products' : queryset})
+	return render(request, 'parapop/products.html', {'user_products' : queryset, 'fav' : True})
 
+def favourites(request):
+	queryset = ProductPost.objects.filter(favUsers__id = request.user.id)
+	return render(request, 'parapop/favourites.html', {'user_products' : queryset})
