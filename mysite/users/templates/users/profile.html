@@ -71,15 +71,14 @@
 	<body>
 		{% block content %}
 		<div class="card">
-		  <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" width = "200px" height = "200px">
-		  <a class="nav-link" href="{% url 'favourites' %}">Favoritos</a>
- 		  <h1>{{user.username}}</h1>
-		  <p class="title">{{user.first_name}} {{user.last_name}}</p>
-		  <p>{{user.email}}</p>
+		  	<img class="rounded-circle account-img" src="{{ user.profile.image.url }}" width = "200px" height = "200px">
+ 		  	<h1>{{user.username}}</h1>
+		  		<p class="title">{{user.first_name}} {{user.last_name}}</p>
+		  		<p>{{user.email}}</p>
+				<p>Seguidores: {{followers_count}} Seguidos: {{followings_count}}</p>
 
-			<p>Seguidores: {{followers_count}}   Seguidos: {{followings_count}}</p>
-		  <p><button role="link" onclick="window.location='{% url 'products' %}'">Productos</button></p>
-
+				<button name="fav" onclick="window.location='{% url 'favourites' %}'">Favoritos</button>
+		 		<p><button name="fav" onclick="window.location='{% url 'products' %}'">Productos</button></p>
 		</div>
 		{% endblock content %}
 

@@ -14,12 +14,12 @@
 
 {% block content %}
     <div class = "content-section">
-        <form method = "POST">
+        <form method = "POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class = "form-group">
                 <legend class ="border-bottom mb-4"> Registro</legend>
-                {{ form.as_p }}               
-
+                {{ form.as_p }}
+                {{profileForm.image}}               
             </fieldset>
             <div class ="form-group">
                 <button class="btn btn-online-info" type = "submit">Regístrate</button>

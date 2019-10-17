@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegisterForm
 from .forms import FollowAction
+from .forms import ProfileCreation
 from django.contrib.auth.decorators import login_required
 from .models import Follow
 from .models import Profile
@@ -12,13 +13,25 @@ def register(request):
 	if request.method == 'POST':
 		form = UserRegisterForm(request.POST)
 		if form.is_valid():
-			form.save()
+			print("AAAAAAAAAAAA")
+			form.save()		
 			username = form.cleaned_data.get('username')
-			return redirect('homepage')
+			user = User.objects.filter(username = username)
 
+			try:
+				im = request.FILES["image"]
+				Profile.objects.create(user = user[0], image = im)
+			except:
+				Profile.objects.create(user = user[0])
+			return redirect('homepage')
+		else:
+			form = UserRegisterForm()
+			profileForm = ProfileCreation()
+			return render(request,'users/register.html',{'form': form, 'profileForm': profileForm})
 	else:
 		form = UserRegisterForm()
-	return render(request,'users/register.html',{'form': form})
+		profileForm = ProfileCreation()
+		return render(request,'users/register.html',{'form': form, 'profileForm': profileForm})
 
 
 def login(request):

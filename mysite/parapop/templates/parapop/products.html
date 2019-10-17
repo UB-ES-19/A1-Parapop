@@ -69,24 +69,30 @@
 	<!--================Header Menu Area =================-->
 
 	<body>
-		{% for product in user_products %}
-			<div class="card">
-				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
-			    <h1>{{product.title}}</h1>
-			    <p class="price">{{product.price}} €</p>
-			    <p>{{product.description}}</p>
-			    {% if fav %}
-			    	<form method= "POST">
-			    		{% csrf_token %}
-			    		{% if user in product.favUsers.all %}
-							<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Eliminar de favoritos</button></p>
-			    		{% else %}				    	
-				    		<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Añadir a favoritos</button></p>
-				    	{% endif %}
-			    	</form>
-			    {% else %}
-			    	<p><button>Edit</button></p>
-			    {% endif %}
+		{% if user_products %}
+			{% for product in user_products %}
+				<div class="card">
+					<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+				    <h1>{{product.title}}</h1>
+				    <p class="price">{{product.price}} €</p>
+				    <p>{{product.description}}</p>
+				    {% if fav %}
+				    	<form method= "POST">
+				    		{% csrf_token %}
+				    		{% if user in product.favUsers.all %}
+								<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Eliminar de favoritos</button></p>
+				    		{% else %}				    	
+					    		<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Añadir a favoritos</button></p>
+					    	{% endif %}
+				    	</form>
+				    {% else %}
+				    	<p><button>Edit</button></p>
+				    {% endif %}
+				</div>
+			{% endfor %}
+		{% else %}
+			<div>
+				<h1 align="center">No hay productos que mostrar!</h1>
 			</div>
-		{% endfor %}
+		{% endif %}
 	</body>
