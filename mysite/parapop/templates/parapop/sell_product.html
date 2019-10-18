@@ -45,16 +45,14 @@
 <body>
 	<section>
 		<div class="container">
-			<form method ="POST">
+			{% block content %}
+			<form method ="POST" enctype="multipart/form-data">
 				{% csrf_token %}
-				{{ form }}
-				<input type = "text" class = "form-control" placeholder="Nombre del producto" name = "title" required>
-				<input type = "text" class = "form-control" placeholder="Descripción" name = "description" required>
-				<input type = "number" class = "form-control" placeholder="Precio" name = "price" required>
-				<input type = "file" class = "form-control"  name = "product_pic" required>
+				{{ form.as_p }}
 				<button name = "sell-button" type="submit">Vender producto</button>
 				
 			</form>
+			{% endblock %}
 		</div>
 		
 	</section>

@@ -21,6 +21,7 @@ from users import views as user_views
 from parapop import views as parapop_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
@@ -30,11 +31,12 @@ urlpatterns = [
     path('logout/', log_views.LogoutView.as_view(template_name='parapop/index.html'), name='logout'),
     path('', include('parapop.urls')),
     path('profile/', user_views.profile, name='profile'),
-    path('products/', user_views.products, name='products'),
+    path('products/', parapop_views.products, name='products'),
     url(r'profile/(?P<username>[a-zA-Z0-9]+)$', user_views.get_user_profile),
     path('sell-product/', parapop_views.sell_product, name='sell_product'),
+    path('favourites/', parapop_views.favourites, name='favourites'),
 ]
 
 if settings.DEBUG:
-
+    urlpatterns +=staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

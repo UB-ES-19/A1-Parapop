@@ -69,19 +69,18 @@
 	<!--================Header Menu Area =================-->
 
 	<body>
-		<div class="card">
-		  <img src="../media/product_pics/tailored_jeans.jpg" alt="Ropa y accesorios" style="width:100%">
-		  <h1>Tailored Jeans</h1>
-		  <p class="price">$19.99</p>
-		  <p>Pantalón de diseño. Vendo por no usar, la talla no me va bien así que sólo lo utilicé una vez</p>
-		  <p><button>Edit</button></p>
-		</div>
-		<br></br>
-		<div class="card">
-			<img src="../media/product_pics/decathlon_swimsuit.jpg" alt="Ropa y accesorios" style="width:100%">
-			<h1>Bañador Decathlon</h1>
-			<p class="price">$10.50</p>
-			<p>Bañador del Decathlon con la etiqueta. Sin estrenar. Edición especial.</p>
-			<p><button>Edit</button></p>
-		</div>
-	</body>
+		{% if user_products %}
+			{% for product in user_products %}
+				<div class="card">
+					<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+				    <h1>{{product.title}}</h1>
+				    <p class="price">{{product.price}} €</p>
+				    <p>{{product.description}}</p>
+				</div>
+			{% endfor %}
+		{% else %}
+			<div>
+				<h1 align="center">No hay productos que mostrar!</h1>
+			</div>
+		{% endif %}
+

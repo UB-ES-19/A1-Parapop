@@ -63,11 +63,9 @@
 						<!-- Collect the nav links, forms, and other content for toggling -->
 						<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 							<ul class="nav navbar-nav menu_nav ml-auto">
-								{% if user.is_authenticated %}
-								<li class="nav-item"><a class="nav-link" href="{% url 'sell_product' %}" %>Vender producto</a></li>			
+								{% if user.is_authenticated %}		
 								<li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Mis productos</a></li>
 								{% else %}
-								<li class="nav-item"><a class="nav-link" href="{%url 'login' %}" %>Vender producto</a></li>	
 								<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Mis productos</a></li>
 								{% endif %}
 								<li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
@@ -97,11 +95,17 @@
 						{% else %}
 						<h3>¿Qué estás buscando hoy? </h3>
 						{% endif %}
-						<p>Pallapop, la plataforma líder en la compraventa de segunda mano
+						<p>Parapop, la plataforma líder en la compraventa de segunda mano
 							<br>
 						</br>
-						<a class="blue_btn"  href="#"  >Subir Producto</a>
-						<a class="blue_btn" href="#">Explorar</a>
+						{% if user.is_authenticated %}
+								<a class="blue_btn"  href="{% url 'sell_product' %}"  >Vender Producto</a>
+								<a class="blue_btn" href="#">Explorar</a>
+						{% else %}
+								<a class="blue_btn"  href="{% url 'login' %}"  >Vender Producto</a>
+								<a class="blue_btn" href="#">Explorar</a>
+						{% endif %}
+						
 					</div>
 				</div>
             </div>
