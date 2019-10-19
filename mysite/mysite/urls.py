@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'profile/(?P<username>[a-zA-Z0-9]+)$', user_views.get_user_profile),
     path('sell-product/', parapop_views.sell_product, name='sell_product'),
     path('favourites/', parapop_views.favourites, name='favourites'),
+    path('update_profile/', user_views.profileUpdate, name='profileUpdate'),
+    url(r'^update_product/(?P<productU>.*)/$', parapop_views.updateProduct, name='update_product'),
 ]
 
 if settings.DEBUG:

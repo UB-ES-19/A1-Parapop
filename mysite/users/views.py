@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegisterForm
 from .forms import FollowAction
-from .forms import ProfileCreation
+from .forms import ProfileCreation, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from .models import Follow
 from .models import Profile
 from django.contrib.auth.models import User
 from parapop import views as parapop_views
+
 
 def register(request):
 	if request.method == 'POST':
@@ -141,3 +142,20 @@ def get_user_profile(request, username):
 	args = {'message_error' : "Usuario no encontrado!", 'is_error' : True}
 
 	return render(request, 'parapop/index.html', args)
+
+@login_required
+def profileUpdate(request):
+	if request.method == 'POST':
+		userForm = UserUpdateForm(request.POST, instance = request.user)
+		profileForm = ProfileUpdateForm(request.POST, request.FILES, instance = request.user.profile)
+		if (userForm.is_valid() and profileForm.is_valid()):
+			userForm.save()
+			profileForm.save()
+			return profile(request)
+
+	else:
+		userForm = UserUpdateForm(instance = request.user)
+		profileForm = ProfileUpdateForm(instance = request.user.profile)
+		args = {'userForm': userForm, 'profileForm' : profileForm}
+
+	return render(request, 'users/profile_update.html', args)

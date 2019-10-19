@@ -36,3 +36,17 @@ class ProfileCreation(forms.ModelForm):
 	class Meta:
 		model = Profile
 		fields = ['user', 'image']
+
+class UserUpdateForm(forms.ModelForm):
+
+	email = forms.EmailField(label = "Email", required=True)
+	
+	class Meta:
+		model = User
+		fields = ['username', 'first_name', 'last_name','email']
+
+class ProfileUpdateForm(forms.ModelForm):
+
+	class Meta:
+		model = Profile
+		fields = ['image']

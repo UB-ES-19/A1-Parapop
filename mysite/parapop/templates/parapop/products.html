@@ -86,7 +86,7 @@
 					    	{% endif %}
 				    	</form>
 				    {% else %}
-				    	<p><button>Edit</button></p>
+				       	<a href="{% url 'update_product'  productU=product.title %}">Editar</a>
 				    {% endif %}
 				</div>
 			{% endfor %}

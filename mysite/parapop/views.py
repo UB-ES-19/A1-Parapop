@@ -53,3 +53,18 @@ def other_user_products(request, username, productName):
 def favourites(request):
 	queryset = ProductPost.objects.filter(favUsers__id = request.user.id)
 	return render(request, 'parapop/favourites.html', {'user_products' : queryset})
+
+def updateProduct(request,productU):
+	if request.method == 'POST':
+		instance = ProductPost.objects.filter(title = productU)
+		productForm = SellProduct(request.POST, request.FILES, instance = instance[0])
+		if productForm.is_valid():
+			productForm.save()
+			return products(request)
+	else:
+
+		instance = ProductPost.objects.filter(title = productU)
+		productForm = SellProduct(instance = instance[0])
+		args = {'productForm' : productForm}
+
+	return render(request, 'parapop/update_product.html', args)
