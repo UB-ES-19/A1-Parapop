@@ -8,3 +8,4 @@ class SellProduct(forms.ModelForm):
 	class Meta:
 		model = ProductPost
 		fields = ('title', 'description', 'price','productPic',)
+

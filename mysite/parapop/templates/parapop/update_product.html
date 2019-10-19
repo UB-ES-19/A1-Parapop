@@ -71,15 +71,11 @@
 	<body>
 		{% block content %}
 		<div class="card">
-		  	<img class="rounded-circle account-img" src="{{ user.profile.image.url }}" width = "200px" height = "200px">
-		  	<button name="edit" onclick="window.location='{% url 'profileUpdate' %}'">Editar perfil</button>
- 		  	<h1>{{user.username}}</h1>
-		  		<p class="title">{{user.first_name}} {{user.last_name}}</p>
-		  		<p>{{user.email}}</p>
-				<p>Seguidores: {{followers_count}} Seguidos: {{followings_count}}</p>
-
-				<button name="fav" onclick="window.location='{% url 'favourites' %}'">Favoritos</button>
-		 		<p><button name="fav" onclick="window.location='{% url 'products' %}'">Productos</button></p>
+			<form method = "POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{productForm}}
+				<button class="btn btn-online-info" type="submit">Guardar</button>
+			</form>
 		</div>
 		{% endblock content %}
 
