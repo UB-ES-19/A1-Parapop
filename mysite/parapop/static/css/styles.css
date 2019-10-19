@@ -859,3 +859,36 @@ Table of Content:
 
 /* End Feature Area css
 ============================================================================================ */
+
+
+/* Form css
+============================================================================================ */
+
+}
+
+.global-container{
+
+	height:100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f5f5f5;
+}
+
+.form-group button{
+
+  margin-top: 10px;
+}
+
+
+.card-title{
+  font-weight:300;
+
+ }
+
+
+.alert{
+	margin-bottom:-30px;
+	font-size: 13px;
+	margin-top:20px;
+}
