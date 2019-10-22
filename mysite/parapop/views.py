@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from users import views as user_views
 from django.views.generic import CreateView
 from .models import ProductPost
+from .models import Tag
 from .forms import SellProduct
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
@@ -25,10 +26,15 @@ def home(request):
 def sell_product(request):
 	if request.method == 'POST':
 		form = SellProduct(request.POST, request.FILES)
+		print(request.POST.getlist('tags'))
+		print(Tag.objects.all()[0])
 		if form.is_valid():	
 			product = form.save(commit = False)
 			product.author = request.user
 			product.save()
+			instance = get_object_or_404(ProductPost, title = request.POST.get("title"))
+			for pos in request.POST.getlist('tags'):
+				instance.tag.add(Tag.objects.all()[int(pos)-1])
 			return redirect('../')
 	else:
 		form = SellProduct()
@@ -60,6 +66,8 @@ def updateProduct(request,productU):
 		productForm = SellProduct(request.POST, request.FILES, instance = instance[0])
 		if productForm.is_valid():
 			productForm.save()
+			for pos in request.POST.getlist('tags'):
+				instance[0].tag.add(Tag.objects.all()[int(pos)-1])
 			return products(request)
 	else:
 
