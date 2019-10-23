@@ -66,6 +66,7 @@ def updateProduct(request,productU):
 		productForm = SellProduct(request.POST, request.FILES, instance = instance[0])
 		if productForm.is_valid():
 			productForm.save()
+			instance[0].tag.clear()
 			for pos in request.POST.getlist('tags'):
 				instance[0].tag.add(Tag.objects.all()[int(pos)-1])
 			return products(request)
@@ -73,6 +74,10 @@ def updateProduct(request,productU):
 
 		instance = ProductPost.objects.filter(title = productU)
 		productForm = SellProduct(instance = instance[0])
-		args = {'productForm' : productForm}
+		tagList = []
+		for tag in instance[0].tag.all():
+			tagList.append(tag)
+
+		args = {'productForm' : productForm, 'tagList' : tagList}
 
 	return render(request, 'parapop/update_product.html', args)
