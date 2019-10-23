@@ -67,18 +67,29 @@
 	</header>
 	<!--================Header Menu Area =================-->
 
-<body>
-	<section>
-		<div class="container">
-			{% block content %}
-			<form method ="POST" enctype="multipart/form-data">
-				{% csrf_token %}
-				{{ form.as_p }}
-				<button name = "sell-button" type="submit">Colgar producto</button>
+	<body>
+		<section>
+			<div class="container">
+				{% block content %}
+					  <div class = "global container">
+							<div class="card login-form">
+								<div class="card-body">
+					        <form method = "POST" enctype="multipart/form-data">
+											{% csrf_token %}
 
-			</form>
-			{% endblock %}
-		</div>
+								<fieldset class = "form-group">
+										<legend class ="border-bottom mb-4"> Vender producto</legend>
+								{{ form.as_p }}
+								</fieldset>
+									<div class ="form-group">
+											<button class="blue_btn" type = "submit">Regístrate</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				{% endblock %}
+			</div>
 
-	</section>
-</body>
+		</section>
+	</body>
