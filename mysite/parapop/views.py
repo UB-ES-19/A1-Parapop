@@ -28,7 +28,7 @@ def sell_product(request):
 		form = SellProduct(request.POST, request.FILES)
 		print(request.POST.getlist('tags'))
 		print(Tag.objects.all()[0])
-		if form.is_valid():	
+		if form.is_valid():
 			product = form.save(commit = False)
 			product.author = request.user
 			product.save()
@@ -81,3 +81,6 @@ def updateProduct(request,productU):
 		args = {'productForm' : productForm, 'tagList' : tagList}
 
 	return render(request, 'parapop/update_product.html', args)
+
+def FAQ(request):
+	return render(request, 'parapop/FAQ.html')
