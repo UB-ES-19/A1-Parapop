@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Follow
 from .models import Profile
+from .models import Location
+
 
 
 class UserRegisterForm(UserCreationForm):
@@ -12,6 +14,7 @@ class UserRegisterForm(UserCreationForm):
 	last_name = forms.CharField(label= "Apellido")
 	password1 = forms.CharField(label= "Contraseña", widget = forms.PasswordInput)
 	password2 = forms.Field(label= "Repetir contraseña", widget = forms.PasswordInput)
+	localización =  forms.ModelChoiceField(queryset=Location.objects.all())
 
 	class Meta:
 
@@ -49,4 +52,4 @@ class ProfileUpdateForm(forms.ModelForm):
 
 	class Meta:
 		model = Profile
-		fields = ['image']
+		fields = ['image', 'location']

@@ -6,9 +6,10 @@ from .forms import ProfileCreation, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from .models import Follow
 from .models import Profile
+from .models import Location
 from django.contrib.auth.models import User
 from parapop import views as parapop_views
-
+from django.shortcuts import get_object_or_404
 
 def register(request):
 	if request.method == 'POST':
@@ -18,12 +19,18 @@ def register(request):
 			form.save()		
 			username = form.cleaned_data.get('username')
 			user = User.objects.filter(username = username)
-
+			locationPos = request.POST.getlist('localización')[0]
+			location = Location.objects.all()[int(locationPos)-1]
 			try:
-				im = request.FILES["image"]
+				im = request.FILES["image"]	
 				Profile.objects.create(user = user[0], image = im)
 			except:
 				Profile.objects.create(user = user[0])
+
+			instance = get_object_or_404(Profile, user = user[0])
+			print(location)
+			instance.location.add(location)
+
 			return redirect('homepage')
 		else:
 			form = UserRegisterForm()
