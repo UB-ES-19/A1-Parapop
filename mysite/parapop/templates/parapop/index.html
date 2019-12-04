@@ -63,13 +63,13 @@
 						<!-- Collect the nav links, forms, and other content for toggling -->
 						<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 							<ul class="nav navbar-nav menu_nav ml-auto">
-								{% if user.is_authenticated %}		
+								{% if user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Mis productos</a></li>
 								{% else %}
 								<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Mis productos</a></li>
 								{% endif %}
 								<li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
-								<li class="nav-item"><a class="nav-link" href="#">Preguntas Frecuentes</a></li>
+								<li class="nav-item"><a class="nav-link" href="/FAQ">Preguntas Frecuentes</a></li>
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 								<li class="nav-item"><a href="#" class="search"><i class="lnr lnr-magnifier"></i></a></li>
@@ -105,7 +105,7 @@
 								<a class="blue_btn"  href="{% url 'login' %}"  >Vender Producto</a>
 								<a class="blue_btn" href="#">Explorar</a>
 						{% endif %}
-						
+
 					</div>
 				</div>
             </div>

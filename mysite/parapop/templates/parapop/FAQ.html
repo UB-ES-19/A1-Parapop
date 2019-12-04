@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+	<title >Parapop</title>
+	 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'css/FAQ.css' %}"></link>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+  <!--================Header Menu Area =================-->
+  <header class="header_area">
+     	<div class="top_menu row m0">
+     		<div class="container">
+		<div class="float-right">
+
+			<form method = "GET">
+				<div id = "user_browser">
+					<div class = "input-group col-md-12">
+						{% if is_error %}
+							{{message_error}}
+						{% endif %}
+						<input type = "text" class = "form-control" placeholder="¿Buscando a alguien?" name = "user_browsed">
+						<span class = "input-group-list">
+							<i class = "icon icon-search"></i>
+							<button type = "submit" class="ac_btn">Buscar</button>
+					</div>
+				</div>
+			</form>
+
+			<select class="lan_pack">
+				<option value="1">Todo</option>
+			<option value="1">Ropa y accesorios</option>
+				<option value="1">Deportes</option>
+				<option value="1">Motor</option>
+				<option value="1">Tenis</option>
+				<option value="1">Videojuegos</option>
+				<option value="1">Dipositivos multimedia</option>
+			</select>
+			{% if user.is_authenticated %}
+
+				<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
+				<a class="dn_btn" href="{% url 'profile' %}">Perfil</a>
+			{% else %}
+				<a class="ac_btn" href="/login">Iniciar Sesión</a>
+				<a class="dn_btn" href="/register">Regístrate</a>
+			{% endif %}
+		</div>
+     		</div>
+     	</div>
+      <div class="main_menu">
+      	<nav class="navbar navbar-expand-lg navbar-light">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<a class="navbar-brand-logo_h-titulo" href="http://localhost:8000/" >Parapop</a>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+				<ul class="nav navbar-nav menu_nav ml-auto">
+					{% if user.is_authenticated %}
+					<li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Mis productos</a></li>
+					{% else %}
+					<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Mis productos</a></li>
+					{% endif %}
+					<li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
+					<li class="nav-item"><a class="nav-link" href="/FAQ">Preguntas Frecuentes</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="nav-item"><a href="#" class="search"><i class="lnr lnr-magnifier"></i></a></li>
+				</ul>
+			</div>
+		</div>
+      	</nav>
+      </div>
+  </header>
+  <!--================Header Menu Area =================-->
+
+	<body>
+	  <!-- La lista de preguntas irá aquí -->
+	  <div class="fondo">
+	    <ul class="lista">
+	      <!-- Pregunta 1 -->
+	      <li class="pregunta" data-resp_id="resp_1">
+	        <span>¿Cómo me registro y que ventajas me da?</span>
+	        <i class="ico_resp fas fa-angle-down"></i>
+	      </li>
+	      <li class="respuesta" id="resp_1">
+	        <span id="sp_resp_1">Tienes la posibilidad de registrate en la esquina de la derecha. El botón está resaltado en azul. Si no te registras, no podrás colgar productos ni vender, pero si podrás ver los productos que otras personas hayan colgado</span>
+	      </li>
+
+	      <!-- Pregunta 2 -->
+	      <li class="pregunta" data-resp_id="resp_2">
+	        <span>¿Cómo cambio de contraseña?</span>
+	        <i class="ico_resp fas fa-angle-down"></i>
+	      </li>
+	      <li class="respuesta" id="resp_2">
+	        <span id="sp_resp_2">No es posible. Lo incorporaremos en una futura actualización</span>
+	      </li>
+
+	      <!-- Pregunta 3 -->
+	      <li class="pregunta" data-resp_id="resp_3">
+	        <span>¿Dónde está mi perfil de usuario y que posibilidades me da?</span>
+	        <i class="ico_resp fas fa-angle-down"></i>
+	      </li>
+	      <li class="respuesta" id="resp_3">
+	        <span id="sp_resp_3">Puedes acceder al perfil a partir del botón situado arriba a la drecha. Desde el perfil puedes editar perfil, acceder a tus favoritos y ver tus productos en venta</span>
+	      </li>
+
+				<!-- Pregunta 4 -->
+				<li class="pregunta" data-resp_id="resp_4">
+					<span>¿Cómo busco a otra persona?</span>
+					<i class="ico_resp fas fa-angle-down"></i>
+				</li>
+				<li class="respuesta" id="resp_4">
+					<span id="sp_resp_4">Tienes un buscador arriba a la derecha que te permitirá buscar a usuarios. Si buscas al usuario podrás ver sus productos. Además si cuando lo buscas estás registrado, podrás seguir a este usuario.</span>
+				</li>
+
+	      <!-- Pregunta 5 -->
+	      <li class="pregunta" data-resp_id="resp_5">
+	        <span>¿Cómo marco los favoritos y dónde los encuentro?</span>
+	        <i class="ico_resp fas fa-angle-down"></i>
+	      </li>
+	      <li class="respuesta" id="resp_5">
+	        <span id="sp_resp_5">Para marcar los favoritos has de buscar a la persona la cual haya colgado ese producto y desde ahí ir a sus productos. SI ESTÁS REGISTRADO, podrás seleccionar cualquiera de estos productos como favoritos</span>
+	      </li>
+
+				<!-- Pregunta 6 -->
+				<li class="pregunta" data-resp_id="resp_6">
+					<span>¿Cómo vendo un producto?</span>
+					<i class="ico_resp fas fa-angle-down"></i>
+				</li>
+				<li class="respuesta" id="resp_6">
+					<span id="sp_resp_6">Puedes acceder al formulario de venta a partir del botón que se encuentra en medio de la pantalla prinicpal. En este formulario deberás poner un título, una descripción, un precio, una foto y una categoría. Finalmente para ponerlo en venta deberás darle al botón. </span>
+				</li>
+
+				<!-- Pregunta 7 -->
+				<li class="pregunta" data-resp_id="resp_7">
+					<span>¿Que productos no son aceptados?</span>
+					<i class="ico_resp fas fa-angle-down"></i>
+				</li>
+				<li class="respuesta" id="resp_7">
+					<span id="sp_resp_7">Los productos que nos son aceptados son: Animales, alimentos, medicamentos, armas, cosas que puedan herir psicológicamente a alguien y cosas penalizadas por la ley</span>
+				</li>
+
+				<!-- Pregunta 8 -->
+				<li class="pregunta" data-resp_id="resp_8">
+					<span>Me han eliminado un producto, ¿Por qué?</span>
+					<i class="ico_resp fas fa-angle-down"></i>
+				</li>
+				<li class="respuesta" id="resp_8">
+					<span id="sp_resp_8">No debía cumplir las reglas descritas en la pregunta anterior.</span>
+				</li>
+
+				<!-- Pregunta 9 -->
+				<li class="pregunta" data-resp_id="resp_9">
+					<span>¿Se pueden enviar los productos?</span>
+					<i class="ico_resp fas fa-angle-down"></i>
+				</li>
+				<li class="respuesta" id="resp_9">
+					<span id="sp_resp_9">Aún no hemos incorporado esa opción. Confiamos en poder incorporarla cuanto antes.</span>
+				</li>
+
+				<!-- Pregunta 10 -->
+				<li class="pregunta" data-resp_id="resp_10">
+					<span>Me he equivocado a la hora de colgar un producto. ¿Lo puedo editar?</span>
+					<i class="ico_resp fas fa-angle-down"></i>
+				</li>
+				<li class="respuesta" id="resp_10">
+					<span id="sp_resp_10">Has de ir a tus productos y debajo de cada ventana de explicación del producto tienes la opción de "Editar" en color azul. Entrarás en un formulario donde podrás editar cualquier dato de tu producto y finalmente tendrás que darle al botón "Editar Producto"</span>
+				</li>
+
+	    </ul>
+	  </div>
+
+	  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script type="text/javascript" src="{% static 'css/scriptFAQ.js' %}"></script>
+	</body>
+
+</html>
