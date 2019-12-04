@@ -23,6 +23,27 @@ def home(request):
 		args = {'message_error' : "No error", 'is_error' : False}
 		return render(request, 'parapop/index.html', args)
 
+def busqueda(self):
+
+	#q = request.GET.get('q', '')
+
+   	#q_users = Q(username__icontains=q)
+
+   	#eventos = Evento.objects.filter(querys)
+   	#return render(request, 'template_busqueda.html', {'eventos': eventos})
+	
+	queryset = request.GET.get("q",'')
+	q_users = reduce(or_, (Q(username__icontains=i) for i in queryset))
+	l_users = User.objects.filter(q_users)
+
+	q_products = reduce(or_, (Q(title__icontains=i) for i in queryset))
+	q_products |= reduce(or_, (Q(description__icontains=i) for i in queryset))
+	q_products |= reduce(or_, (Q(tag__icontains=i) for i in queryset))
+	q_products = reduce(or_, q_products)
+	l_products = ProductPost.objects.filter(q_products)
+
+	return render(request, 'template_busqueda.html', {'users':l_users, 'products':l_products})
+
 def sell_product(request):
 	if request.method == 'POST':
 		form = SellProduct(request.POST, request.FILES)
