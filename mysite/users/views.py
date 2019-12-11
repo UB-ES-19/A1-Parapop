@@ -174,13 +174,17 @@ def profileUpdate(request):
 @login_required
 def petitions(request):
 	if request.POST.get("accept"):
-		product = ProductPost.objects.filter(title = request.POST.get("accept"))[0]
-		print(product)
-		petition = Petition.objects.filter(reciever = request.user, product = product)
+		text = request.POST.get("accept").split(",")
+		product = ProductPost.objects.filter(title = text[0])[0]
+		sender = User.objects.get(username = text[1])
+		petition = Petition.objects.filter(reciever = request.user, product = product, sender = sender)
 		petition.update(currentState = "Accepted")
-		ProductPost.objects.filter(title = request.POST.get("accept")).update(purchased_by = petition[0].sender)
+		otherPetitions = Petition.objects.filter(reciever = request.user, product = product).exclude(sender = sender)
+		otherPetitions.update(currentState = "Denied")
+		ProductPost.objects.filter(title = text[0]).update(purchased_by = petition[0].sender)
 	elif request.POST.get("deny"):
-		product = ProductPost.object.filter(title = request.POST.get("accept"))
+		text = request.POST.get("accept").split(",")
+		product = ProductPost.object.filter(title = text[0])
 		petition = Petition.object.get(reciever = request.user, product = product)
 		petition.update(currentState = "Denied")
 

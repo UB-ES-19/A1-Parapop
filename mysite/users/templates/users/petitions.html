@@ -77,7 +77,7 @@
 							<form method= "POST">
 							{% csrf_token %%}
 								<p style="color:#232b2b">El usuario {{petition.sender.username}} quiere comprar el producto {{petition.product.title}}.</p>
-								<button  type = "submit" name = "accept" value= "{{petition.product}}">Aceptar</button>
+								<button  type = "submit" name = "accept" value= "{{petition.product}},{{petition.sender.username}}">Aceptar</button>
 								<button  type = "submit" name = "deny" value= "{{petition.product}}">Rechazar</button>
 							
 						{% endfor %}
