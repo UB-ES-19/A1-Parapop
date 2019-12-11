@@ -81,10 +81,16 @@
 				    {% if fav %}
 				    	<form method= "POST">
 				    		{% csrf_token %}
+				    		{{petitionForm}}
 				    		{% if user in product.favUsers.all %}
 								<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Eliminar de favoritos</button></p>
 				    		{% else %}				    	
 					    		<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Añadir a favoritos</button></p>
+					    	{% endif %}
+					    	{% if product in petitions %}
+					    		<p><button type = "submit" background_color="grey" name = "buyProduct" value = "{{product.title}}" disabled>Solicitud enviada</button></p>
+					    	{% else %}
+					    		<p><button type = "submit" name = "buyProduct" value = "{{product.title}}">Comprar</button></p>
 					    	{% endif %}
 				    	</form>
 				    {% else %}
@@ -98,3 +104,5 @@
 			</div>
 		{% endif %}
 	</body>
+
+	

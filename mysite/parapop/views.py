@@ -7,8 +7,10 @@ from django.views.generic import CreateView
 from .models import ProductPost
 from .models import Tag
 from .forms import SellProduct
+from users.forms import PetitionForm
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
+from users.models import Petition
 from django.shortcuts import get_object_or_404
 
 def home(request):
@@ -63,19 +65,36 @@ def sell_product(request):
 
 
 def products(request):
-	queryset = ProductPost.objects.filter(author = request.user)
+	queryset = ProductPost.objects.filter(author = request.user, purchased_by = None)
 	return render(request, 'parapop/products.html', {'user_products' : queryset})
 
-def other_user_products(request, username, productName):
+def other_user_products(request, username, productName, buyPetition):
 	if(productName != None):
 		product = get_object_or_404(ProductPost, title = productName)
-		if(product.favUsers.filter(id = request.user.id).exists()):
-			product.favUsers.remove(request.user)
+		if (buyPetition == True):
+			if request.method == 'POST':
+				reciever = User.objects.filter(username = username)[0]
+				product = ProductPost.objects.filter(title = productName)[0]
+				form = PetitionForm(request.POST)
+				if form.is_valid():
+					petition = form.save(commit = False)
+					petition.sender = request.user
+					petition.reciever = reciever
+					petition.product = product
+					petition.save()
 		else:
-			product.favUsers.add(request.user)
+			if(product.favUsers.filter(id = request.user.id).exists()):
+				product.favUsers.remove(request.user)
+			else:
+				product.favUsers.add(request.user)
 	profile_user = User.objects.filter(username = username)
 	queryset = ProductPost.objects.filter(author = profile_user[0])
-	return render(request, 'parapop/products.html', {'user_products' : queryset, 'fav' : True})
+	petitions = Petition.objects.filter(sender = request.user)
+	productPetitions = [petitions[i].product for i in range (len(petitions))]
+	petitionForm = PetitionForm()
+	print(petitions)
+	print(queryset)
+	return render(request, 'parapop/products.html', {'user_products' : queryset, 'fav' : True, 'petitionForm':petitionForm, 'petitions': productPetitions})
 
 def favourites(request):
 	queryset = ProductPost.objects.filter(favUsers__id = request.user.id)

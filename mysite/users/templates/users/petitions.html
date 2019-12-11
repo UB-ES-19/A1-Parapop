@@ -65,26 +65,65 @@
 				</nav>
 			</div>
 	</header>
+</body>
 	<!--================Header Menu Area =================-->
-
-	<body>
-		{% block content %}
-		<div class="card">
-		  	<img class="rounded-circle account-img" src="{{ user.profile.image.url }}" width = "200px" height = "200px">
-		  	<button name="edit" onclick="window.location='{% url 'profileUpdate' %}'">Editar perfil</button>
- 		  	<h1>{{user.username}}</h1>
-		  		<p class="title">{{user.first_name}} {{user.last_name}}</p>
-		  		<p>{{user.email}}</p>
-		  		<p>{{user.profile.location.first}}</p>
-				<p>Seguidores: {{followers_count}} Seguidos: {{followings_count}}</p>
-
-				<button name="fav" onclick="window.location='{% url 'favourites' %}'">Favoritos</button>
-		 		<button name="fav" onclick="window.location='{% url 'products' %}'">Productos</button>
-		 		<button name="Historial" onclick="window.location='{% url 'record' %}'">Historial</button>
-		</div>
-		{% endblock content %}
-
-	</body>
-
-	</body>
-	</html>
+	<div>
+		<body>
+			<div>
+				<strong>Peticiones pendientes</strong>
+					<div>
+						<b>Recibidas</b>
+						{% for petition in pendingRecievedPetitions %}
+							<form method= "POST">
+							{% csrf_token %%}
+								<p style="color:#232b2b">El usuario {{petition.sender.username}} quiere comprar el producto {{petition.product.title}}.</p>
+								<button  type = "submit" name = "accept" value= "{{petition.product}}">Aceptar</button>
+								<button  type = "submit" name = "deny" value= "{{petition.product}}">Rechazar</button>
+							
+						{% endfor %}
+					</div>
+					<div>
+						<b>Enviadas</b>
+						<div>
+							{% for petition in pendingSentPetitions %}
+								<p style="color:#232b2b">El usuario {{petition.reciever.username}} aún no ha procesado tu solicitud de compra del producto {{petition.product.title}}.</p>
+						</div>	
+						{% endfor %}
+					</div>
+			</div>
+			<div>
+				<b>Peticiones aceptadas</b>
+				<div>
+						<b>Recibidas</b>
+						{% for petition in acceptedRecievedPetitions %}
+							<p style="color:#232b2b">Has vendido tu producto {{petition.product.title}} a {{petition.sender.username}}.</p>
+						{% endfor %}
+					</div>
+					<div>
+						<b>Enviadas</b>
+						<div>
+							{% for petition in acceptedSentPetitions %}
+								<p style="color:#232b2b">Has comprado el producto {{petition.product.title}} de {{petition.reciever.username}}.</p>
+						</div>	
+						{% endfor %}
+					</div>
+			</div>
+			<div>
+				<b>Peticiones rechazadas</b>
+				<div>
+						<b>Recibidas</b>
+						{% for petition in deniedRecievedPetitions %}
+							<p style="color:#232b2b">Has rechazado la peticion de compra del producto {{petition.product.title}} de {{petition.sender.username}}.</p>
+						{% endfor %}
+					</div>
+					<div>
+						<b>Enviadas</b>
+						<div>
+							{% for petition in deniedSentPetitions %}
+								<p style="color:#232b2b">Tu petición de compra del producto {{petition.product.title}} de {{petition.reciever.username}} ha sido rechazada.</p>
+						</div>	
+						{% endfor %}
+					</div>
+			</div>
+		</body>
+	</div>

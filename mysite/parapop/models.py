@@ -14,6 +14,7 @@ class ProductPost(models.Model):
 	productPic = models.FileField(upload_to = 'product_pics/')
 	favUsers = models.ManyToManyField(User, related_name = 'favUsers', blank = True)
 	tag = models.ManyToManyField(Tag) 
+	purchased_by = models.ForeignKey(User, related_name = 'purchased_by', on_delete= models.CASCADE, blank = True, null = True)
 
 	def __str__(self):
 		return self.title
