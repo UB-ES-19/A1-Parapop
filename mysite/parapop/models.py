@@ -15,6 +15,7 @@ class ProductPost(models.Model):
 	favUsers = models.ManyToManyField(User, related_name = 'favUsers', blank = True)
 	tag = models.ManyToManyField(Tag) 
 	purchased_by = models.ForeignKey(User, related_name = 'purchased_by', on_delete= models.CASCADE, blank = True, null = True)
+	score = models.IntegerField(blank = True, null = True)
 
 	def __str__(self):
 		return self.title

@@ -202,6 +202,9 @@ def petitions(request):
 
 @login_required
 def record(request):
+	if request.method == 'POST':
+		text = request.POST.get("score").split(",")
+		ProductPost.objects.filter(title = text[1]).update(score = int(text[0]))
 	soldProducts = ProductPost.objects.filter(author = request.user).exclude(purchased_by = None)
 	purchasedProducts = ProductPost.objects.filter(purchased_by = request.user)
 	args = {'soldProducts' : soldProducts, 'purchasedProducts' : purchasedProducts}
