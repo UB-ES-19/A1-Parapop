@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User	
+from parapop.models import ProductPost
 
 class Location(models.Model):	
 	location = models.CharField(max_length=30)
@@ -20,6 +21,14 @@ class Follow(models.Model):
 
 	def __str__(self):
 		return f'{self.follower.username}'
+
+class Petition(models.Model):
+	sender = models.ForeignKey(User, related_name="sender", on_delete = models.CASCADE, blank = True)
+	reciever = models.ForeignKey(User, related_name="reciever", on_delete = models.CASCADE, blank = True)
+	product = models.ForeignKey(ProductPost, related_name="product", on_delete = models.CASCADE, blank = True)
+	currentState = models.CharField(max_length=15, default = "Pending")
+	def __str__(self):
+		return f'From {self.sender.username} to {self.reciever.username}'
 
 
 
