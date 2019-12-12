@@ -94,7 +94,7 @@
 					</select>
 				</form>
 				{% else %}
-					<h6>Valoración: {{product.score}}</h6>
+					<h6>Has valorado al usuario con un {{product.score}}</h6>
 				{% endif %}
 			</div>
 		{% endfor %}
@@ -112,7 +112,7 @@
 			    <p class="price">{{product.price}} €</p>
 			    <p>{{product.description}}</p>
 			    {% if product.score %}
-			    	<h6>Valoración: {{product.score}}</h6>
+			    	<h6>El usuario te ha valorado con un {{product.score}}</h6>
 			    {% else %}
 			    	<h6>Pendiente de valoración</h6>
 			    {% endif %}
