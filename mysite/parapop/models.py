@@ -20,3 +20,18 @@ class ProductPost(models.Model):
 	def __str__(self):
 		return self.title
 
+class ExchangeProductPost(models.Model):
+	title = models.CharField(max_length = 30)
+	description = models.TextField()
+	author = models.ForeignKey(User, on_delete= models.CASCADE, blank = True)
+	productPic = models.FileField(upload_to = 'product_pics/')
+	favUsers = models.ManyToManyField(User, related_name = 'EfavUsers', blank = True)
+	tag = models.ManyToManyField(Tag) 
+	purchased_by = models.ForeignKey(User, related_name = 'Epurchased_by', on_delete= models.CASCADE, blank = True, null = True)
+	score = models.IntegerField(blank = True, null = True)
+
+	def __str__(self):
+		return self.title
+
+
+

@@ -69,7 +69,7 @@
 
 <body>
 	<div>
-		<b>Productos comprados</b>
+		<b>Productos comprados o recibidos por intercambio</b>
 		{% for product in purchasedProducts %}
 			<div class="card">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
@@ -86,11 +86,38 @@
 			    	<h6>Valoración</h6>
 				    <select name = "score" value = "{{product.title}}" onChange="form.submit()">
 				    	<option value="-">--</option>
-					 	<option value="1,{{product.title}}">1</option>
-						<option value="2,{{product.title}}">2</option>
-					 	<option value="3,{{product.title}}">3</option>
-					 	<option value="4,{{product.title}}">4</option>
-					 	<option value="5,{{product.title}}">5</option>
+					 	<option value="1,{{product.title}},buy">1</option>
+						<option value="2,{{product.title}},buy">2</option>
+					 	<option value="3,{{product.title}},buy">3</option>
+					 	<option value="4,{{product.title}},buy">4</option>
+					 	<option value="5,{{product.title}},buy">5</option>
+					</select>
+				</form>
+				{% else %}
+					<h6>Has valorado al usuario con un {{product.score}}</h6>
+				{% endif %}
+			</div>
+		{% endfor %}
+		{% for product in recivedExchangeProducts %}
+			<div class="card">
+				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+			    <h1>{{product.title}}</h1>
+			    <p>Intercambiado a {{product.author}}</p>
+			    {% for tag in product.tag.all %}
+			    	<h6>{{tag}}</h6>
+			    {% endfor %}
+			    <p>{{product.description}}</p>
+			    {% if not product.score %}
+			    <form method= "POST">
+					{% csrf_token %%}
+			    	<h6>Valoración</h6>
+				    <select name = "score" value = "{{product.title}}" onChange="form.submit()">
+				    	<option value="-">--</option>
+					 	<option value="1,{{product.title}},exchange">1</option>
+						<option value="2,{{product.title}},exchange">2</option>
+					 	<option value="3,{{product.title}},exchange">3</option>
+					 	<option value="4,{{product.title}},exchange">4</option>
+					 	<option value="5,{{product.title}},exchange">5</option>
 					</select>
 				</form>
 				{% else %}
@@ -100,7 +127,7 @@
 		{% endfor %}
 	</div>
 	<div>
-		<b>Productos vendidos</b>
+		<b>Productos vendidos o entregados para intercambio</b>
 		{% for product in soldProducts %}
 			<div class="card">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
@@ -110,6 +137,22 @@
 			    	<h6>{{tag}}</h6>
 			    {% endfor %}
 			    <p class="price">{{product.price}} €</p>
+			    <p>{{product.description}}</p>
+			    {% if product.score %}
+			    	<h6>El usuario te ha valorado con un {{product.score}}</h6>
+			    {% else %}
+			    	<h6>Pendiente de valoración</h6>
+			    {% endif %}
+			</div>
+		{% endfor %}
+		{% for product in givenExchangeProducts %}
+			<div class="card">
+				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+			    <h1>{{product.title}}</h1>
+			    <p>Intercambiado a {{product.purchased_by}}</p>
+			    {% for tag in product.tag.all %}
+			    	<h6>{{tag}}</h6>
+			    {% endfor %}
 			    <p>{{product.description}}</p>
 			    {% if product.score %}
 			    	<h6>El usuario te ha valorado con un {{product.score}}</h6>
