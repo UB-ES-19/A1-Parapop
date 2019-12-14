@@ -98,7 +98,39 @@
 				    {% endif %}
 				</div>
 			{% endfor %}
-		{% else %}
+		{% endif %}
+		{% if exchange %}
+			{% for product in exchange %}
+				<div class="card">
+					<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+				    <h1>{{product.title}}</h1>
+				    {% for tag in product.tag.all %}
+				    	<h6>{{tag}}</h6>
+				    {% endfor %}
+				    <p class="price">Producto para intercambiar</p>
+				    <p>{{product.description}}</p>
+				    {% if fav %}
+				    	<form method= "POST">
+				    		{% csrf_token %}
+				    		{{petitionForm}}
+				    		{% if user in product.favUsers.all %}
+								<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Eliminar de favoritos</button></p>
+				    		{% else %}				    	
+					    		<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Añadir a favoritos</button></p>
+					    	{% endif %}
+					    	{% if product in petitions %}
+					    		<p><button type = "submit" background_color="grey" name = "exchangeProduct" value = "{{product.title}}" disabled>Solicitud enviada</button></p>
+					    	{% else %} 
+					    		<p><button type = "submit" name = "exchangeProduct" value = "{{product.title}}">Intercambiar</button></p>
+					    	{% endif %}
+				    	</form>
+				    {% else %}
+				       	<a href="{% url 'update_exchange_product'  productU=product.title %}">Editar</a>
+				    {% endif %}
+				</div>
+			{% endfor %}
+		{% endif %}
+		{% if not user_products and not exchange%}
 			<div>
 				<h1 align="center">No hay productos que mostrar!</h1>
 			</div>
