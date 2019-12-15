@@ -867,7 +867,7 @@ Table of Content:
 }
 
 .global-container{
-  
+
 	height:100%;
 	display: inline-block;
 	align-items: center;
@@ -891,6 +891,21 @@ Table of Content:
 	margin-bottom:-30px;
 	font-size: 13px;
 	margin-top:20px;
+}
+.subtitulo{
+  margin-left: 85px;
+  font-family: sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  color: #21aaf3;
+}
+
+.sub_subtitulo{
+  margin-left: 100px;
+  font-family: sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #21aaf3;
 }
 
 /*

@@ -69,7 +69,7 @@
 
 <body>
 	<div>
-		<b>Productos comprados o recibidos por intercambio</b>
+		<b class="subtitulo">Productos comprados o recibidos por intercambio</b>
 		{% for product in purchasedProducts %}
 			<div class="card">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
@@ -127,7 +127,7 @@
 		{% endfor %}
 	</div>
 	<div>
-		<b>Productos vendidos o entregados para intercambio</b>
+		<b class="subtitulo">Productos vendidos o entregados para intercambio</b>
 		{% for product in soldProducts %}
 			<div class="card">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
