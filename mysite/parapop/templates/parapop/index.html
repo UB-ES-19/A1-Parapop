@@ -102,10 +102,10 @@
 						</br>
 						{% if user.is_authenticated %}
 								<a class="blue_btn"  href="{% url 'sell_product' %}"  >Vender Producto</a>
-								<a class="blue_btn" href="#">Explorar</a>
+								<a class="blue_btn" href="{% url 'exchange_product' %}">Intercambiar producto</a>
 						{% else %}
 								<a class="blue_btn"  href="{% url 'login' %}"  >Vender Producto</a>
-								<a class="blue_btn" href="#">Explorar</a>
+								<a class="blue_btn" href="{% url 'login' %}">Intercambiar producto</a>
 						{% endif %}
 
 					</div>

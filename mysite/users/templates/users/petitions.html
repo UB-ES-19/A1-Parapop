@@ -70,60 +70,82 @@
 	<div>
 		<body>
 			<div>
-				<strong>Peticiones pendientes</strong>
+				<strong class="subtitulo">Peticiones pendientes</strong>
 					<div>
-						<b>Recibidas</b>
+						<b class="sub_subtitulo">Recibidas</b>
 						{% for petition in pendingRecievedPetitions %}
 							<form method= "POST">
 							{% csrf_token %%}
 								<p style="color:#232b2b">El usuario {{petition.sender.username}} quiere comprar el producto {{petition.product.title}}.</p>
-								<button  type = "submit" name = "accept" value= "{{petition.product}},{{petition.sender.username}}">Aceptar</button>
-								<button  type = "submit" name = "deny" value= "{{petition.product}}">Rechazar</button>
-							
+								<button  type = "submit" name = "acceptSell" value= "{{petition.product}},{{petition.sender.username}}">Aceptar</button>
+								<button  type = "submit" name = "denySell" value= "{{petition.product}},{{petition.sender.username}}">Rechazar</button>
+
+						{% endfor %}
+						{% for exchangePetition in pendingRecievedExchangePetitions %}
+							<form method= "POST">
+							{% csrf_token %%}
+								<p style="color:#232b2b">El usuario {{exchangePetition.sender.username}} quiere intercambiar el producto {{exchangePetition.product.title}} por su {{exchangePetition.hisProduct.title}}.</p>
+								<button  type = "submit" name = "acceptExchange" value= "{{exchangePetition.product}},{{exchangePetition.sender.username}},{{exchangePetition.hisProduct}}">Aceptar</button>
+								<button  type = "submit" name = "denyExchange" value= "{{exchangePetition.product}},{{exchangePetition.sender.username}},{{exchangePetition.hisProduct}}">Rechazar</button>
+
 						{% endfor %}
 					</div>
 					<div>
-						<b>Enviadas</b>
+						<b class="sub_subtitulo">Enviadas</b>
 						<div>
 							{% for petition in pendingSentPetitions %}
 								<p style="color:#232b2b">El usuario {{petition.reciever.username}} aún no ha procesado tu solicitud de compra del producto {{petition.product.title}}.</p>
-						</div>	
-						{% endfor %}
+							{% endfor %}
+							{% for petition in pendingSentExchangePetitions %}
+								<p style="color:#232b2b">El usuario {{petition.reciever.username}} aún no ha procesado tu solicitud de intercambio del producto {{petition.product.title}} por tu {{petition.hisProduct.title}}.</p>
+							{% endfor %}
+						</div>
+
 					</div>
 			</div>
 			<div>
-				<b>Peticiones aceptadas</b>
+				<b class="subtitulo">Peticiones aceptadas</b>
 				<div>
-						<b>Recibidas</b>
-						{% for petition in acceptedRecievedPetitions %}
-							<p style="color:#232b2b">Has vendido tu producto {{petition.product.title}} a {{petition.sender.username}}.</p>
-						{% endfor %}
-					</div>
+					<b class="sub_subtitulo">Recibidas</b>
+					{% for petition in acceptedRecievedPetitions %}
+						<p style="color:#232b2b">Has vendido tu producto {{petition.product.title}} a {{petition.sender.username}}.</p>
+					{% endfor %}
+					{% for petition in acceptedRecievedExchangePetitions %}
+						<p style="color:#232b2b">Has intercambiado tu producto {{petition.product.title}} por {{petition.hisProduct.title}} a {{petition.sender.username}}.</p>
+					{% endfor %}
+				</div>
+				<div>
+					<b class="sub_subtitulo">Enviadas</b>
 					<div>
-						<b>Enviadas</b>
-						<div>
-							{% for petition in acceptedSentPetitions %}
-								<p style="color:#232b2b">Has comprado el producto {{petition.product.title}} de {{petition.reciever.username}}.</p>
-						</div>	
+						{% for petition in acceptedSentPetitions %}
+							<p style="color:#232b2b">Has comprado el producto {{petition.product.title}} de {{petition.reciever.username}}.</p>
+						{% endfor %}
+						{% for petition in acceptedSentExchangePetitions %}
+							<p style="color:#232b2b">Has intercambiado el producto {{petition.product.title}} de {{petition.reciever.username}} por tu {{petition.hisProduct.title}}.</p>
 						{% endfor %}
 					</div>
+
+				</div>
 			</div>
 			<div>
-				<b>Peticiones rechazadas</b>
+				<b class="subtitulo">Peticiones rechazadas</b>
 				<div>
-						<b>Recibidas</b>
-						{% for petition in deniedRecievedPetitions %}
-							<p style="color:#232b2b">Has rechazado la peticion de compra del producto {{petition.product.title}} de {{petition.sender.username}}.</p>
-						{% endfor %}
-					</div>
+					<b class="sub_subtitulo">Recibidas</b>
+					{% for petition in deniedRecievedPetitions %}
+						<p style="color:#232b2b">Has rechazado la peticion de compra del producto {{petition.product.title}} de {{petition.sender.username}}.</p>
+					{% endfor %}
+					{% for petition in deniedRecievedExchangePetitions %}
+						<p style="color:#232b2b">Has rechazado la peticion de intercambio del producto {{petition.product.title}} por {{petition.hisProduct.title}} a {{petition.sender.username}}.</p>
+					{% endfor %}
+				</div>
+				<div>
+					<b class="sub_subtitulo">Enviadas</b>
 					<div>
-						<b>Enviadas</b>
-						<div>
-							{% for petition in deniedSentPetitions %}
-								<p style="color:#232b2b">Tu petición de compra del producto {{petition.product.title}} de {{petition.reciever.username}} ha sido rechazada.</p>
-						</div>	
+						{% for petition in deniedSentPetitions %}
+							<p style="color:#232b2b">Tu petición de intercambio del producto {{petition.product.title}} de {{petition.reciever.username}} por tu {{petition.hisProduct.title}} ha sido rechazada.</p>
 						{% endfor %}
 					</div>
+				</div>
 			</div>
 		</body>
 	</div>

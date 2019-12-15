@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+	<title >Parapop</title>
+	 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/products.css' %}">
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+	<!--================Header Menu Area =================-->
+	<header class="header_area">
+			<div class="top_menu row m0">
+				<div class="container">
+		<div class="float-right">
+			<select class="lan_pack">
+				<option value="1">Todo</option>
+			<option value="1">Ropa y accesorios</option>
+				<option value="1">Deportes</option>
+				<option value="1">Motor</option>
+				<option value="1">Tenis</option>
+				<option value="1">Videojuegos</option>
+				<option value="1">Dipositivos multimedia</option>
+			</select>
+			{% if user.is_authenticated %}
+
+				<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
+				<select class="lan_pack" onchange="location = this.value ">
+          <option value="1" href="">Productos</option>
+				  <option value="{% url 'profile' %}">Personal</option>
+
+				</select>
+			{% else %}
+				<a class="ac_btn" href="/login">Iniciar Sesión</a>
+				<a class="dn_btn" href="/register">Regístrate</a>
+			{% endif %}
+		</div>
+				</div>
+			</div>
+			<div class="main_menu">
+				<nav class="navbar navbar-expand-lg navbar-light">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<a class="navbar-brand-logo_h-titulo" href="http://localhost:8000/" >Parapop</a>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+				<ul class="nav navbar-nav menu_nav ml-auto">
+					<li class="nav-item"><a class="nav-link" href="{% url 'sell_product' %}">Vender producto</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Preguntas Frecuentes</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="nav-item"><a href="#" class="search"><i class="lnr lnr-magnifier"></i></a></li>
+				</ul>
+			</div>
+		</div>
+				</nav>
+			</div>
+	</header>
+	<!--================Header Menu Area =================-->
+	<div class="card">
+		<p>A cambio de</p>
+	</div>
+	<div class="card">
+		<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+	    <h1>{{product.title}}</h1>
+	    {% for tag in product.tag.all %}
+	    	<h6>{{tag}}</h6>
+	    {% endfor %}
+	    <p class="price">Producto para intercambiar</p>
+	    <p>{{product.description}}</p>
+	</div>
+	<div class="card">
+		<p>Ofreces: </p>
+		<form method= "POST">
+		{% csrf_token %%}
+		<select name = "product" onChange="form.submit()">
+	    	<option value="-">--</option>
+	    	{% for yourProduct in yourProducts %}
+	    		<option value="{{product.title}},{{yourProduct.title}}">{{yourProduct.title}}</option>
+	    	{% endfor %}
+		</select>
+	</div>
