@@ -39,7 +39,9 @@ urlpatterns = [
     url(r'^update_product/(?P<productU>.*)/$', parapop_views.updateProduct, name='update_product'),
     path('FAQ/', parapop_views.FAQ, name='FAQ'),
     path('petitions/', user_views.petitions, name='petitions'),
-    path('record/', user_views.record, name='record')
+    path('record/', user_views.record, name='record'),
+    path('exchange-product/', parapop_views.exchangeProduct, name='exchange_product'),
+    url(r'^update_exchange_product/(?P<productU>.*)/$', parapop_views.updateExchangeProduct, name='update_exchange_product')
 ]
 
 if settings.DEBUG:

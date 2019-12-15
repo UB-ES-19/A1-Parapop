@@ -7,7 +7,10 @@ from django.views.generic import CreateView
 from .models import ProductPost
 from .models import Tag
 from .forms import SellProduct
+from .forms import ExchangeProduct
+from .models import ExchangeProductPost
 from users.forms import PetitionForm
+from users.models import ExchangePetition
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
 from users.models import Petition
@@ -66,35 +69,52 @@ def sell_product(request):
 
 def products(request):
 	queryset = ProductPost.objects.filter(author = request.user, purchased_by = None)
-	return render(request, 'parapop/products.html', {'user_products' : queryset})
+	exchange = ExchangeProductPost.objects.filter(author = request.user, purchased_by = None)
+	return render(request, 'parapop/products.html', {'user_products' : queryset, 'exchange' : exchange})
 
-def other_user_products(request, username, productName, buyPetition):
+def other_user_products(request, username, productName, hisProductName, buyPetition, buyOrExchange):
 	if(productName != None):
-		product = get_object_or_404(ProductPost, title = productName)
-		if (buyPetition == True):
-			if request.method == 'POST':
-				reciever = User.objects.filter(username = username)[0]
-				product = ProductPost.objects.filter(title = productName)[0]
-				form = PetitionForm(request.POST)
-				if form.is_valid():
-					petition = form.save(commit = False)
-					petition.sender = request.user
-					petition.reciever = reciever
-					petition.product = product
-					petition.save()
-		else:
-			if(product.favUsers.filter(id = request.user.id).exists()):
-				product.favUsers.remove(request.user)
+		if(buyOrExchange):
+			product = get_object_or_404(ProductPost, title = productName)
+			if (buyPetition == True):
+				if request.method == 'POST':
+					reciever = User.objects.filter(username = username)[0]
+					product = ProductPost.objects.filter(title = productName)[0]
+					form = PetitionForm(request.POST)
+					if form.is_valid():
+						petition = form.save(commit = False)
+						petition.sender = request.user
+						petition.reciever = reciever
+						petition.product = product
+						petition.save()
 			else:
-				product.favUsers.add(request.user)
+				if(product.favUsers.filter(id = request.user.id).exists()):
+					product.favUsers.remove(request.user)
+				else:
+					product.favUsers.add(request.user)
+		else:
+			product = get_object_or_404(ExchangeProductPost, title = productName)
+			hisProduct = get_object_or_404(ExchangeProductPost, title = hisProductName)
+			if (buyPetition == True):
+				reciever = User.objects.filter(username = username)[0]
+				product = ExchangeProductPost.objects.filter(title = productName)[0]
+				hisProduct = ExchangeProductPost.objects.filter(title = hisProductName)[0]
+				exchangePetition = ExchangePetition(sender = request.user, reciever = reciever, product = product, hisProduct = hisProduct)
+				exchangePetition.save()
+			else:
+				if(product.favUsers.filter(id = request.user.id).exists()):
+					product.favUsers.remove(request.user)
+				else:
+					product.favUsers.add(request.user)
 	profile_user = User.objects.filter(username = username)
-	queryset = ProductPost.objects.filter(author = profile_user[0])
+	queryset = ProductPost.objects.filter(author = profile_user[0], purchased_by = None)
+	exchange = ExchangeProductPost.objects.filter(author = profile_user[0], purchased_by = None)
+	disponibleProducts = ExchangeProductPost.objects.filter(author = request.user, purchased_by = None)
 	petitions = Petition.objects.filter(sender = request.user)
 	productPetitions = [petitions[i].product for i in range (len(petitions))]
 	petitionForm = PetitionForm()
-	print(petitions)
-	print(queryset)
-	return render(request, 'parapop/products.html', {'user_products' : queryset, 'fav' : True, 'petitionForm':petitionForm, 'petitions': productPetitions})
+	return render(request, 'parapop/products.html', {'user_products' : queryset,'exchange':exchange, 'fav' : True, 
+		'petitionForm':petitionForm, 'petitions': productPetitions, 'disponibleProducts':disponibleProducts})
 
 def favourites(request):
 	queryset = ProductPost.objects.filter(favUsers__id = request.user.id)
@@ -124,3 +144,42 @@ def updateProduct(request,productU):
 
 def FAQ(request):
 	return render(request, 'parapop/FAQ.html')
+
+
+def exchangeProduct(request):
+	if request.method == 'POST':
+		form = ExchangeProduct(request.POST, request.FILES)
+		print(request.POST.getlist('tags'))
+		print(Tag.objects.all()[0])
+		if form.is_valid():
+			product = form.save(commit = False)
+			product.author = request.user
+			product.save()
+			instance = get_object_or_404(ExchangeProductPost, title = request.POST.get("title"))
+			for pos in request.POST.getlist('tags'):
+				instance.tag.add(Tag.objects.all()[int(pos)-1])
+			return redirect('../')
+	else:
+		form = ExchangeProduct()
+		return render(request, 'parapop/exchange_product.html', {'form' : form})
+
+def updateExchangeProduct(request,productU):
+	if request.method == 'POST':
+		instance = ExchangeProductPost.objects.filter(title = productU)
+		productForm = ExchangeProduct(request.POST, request.FILES, instance = instance[0])
+		if productForm.is_valid():
+			productForm.save()
+			instance[0].tag.clear()
+			for pos in request.POST.getlist('tags'):
+				instance[0].tag.add(Tag.objects.all()[int(pos)-1])
+			return products(request)
+	else:
+		instance = ExchangeProductPost.objects.filter(title = productU)
+		productForm = ExchangeProduct(instance = instance[0])
+		tagList = []
+		for tag in instance[0].tag.all():
+			tagList.append(tag)
+
+		args = {'productForm' : productForm, 'tagList' : tagList}
+
+	return render(request, 'parapop/update_exchange_product.html', args)

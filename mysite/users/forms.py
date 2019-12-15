@@ -5,7 +5,7 @@ from .models import Follow
 from .models import Profile
 from .models import Location
 from .models import Petition
-
+from .models import ExchangePetition
 
 
 class UserRegisterForm(UserCreationForm):
@@ -61,3 +61,10 @@ class PetitionForm(forms.ModelForm):
 		model = Petition
 		fields =  ['sender', 'reciever', 'product']
 		widgets = {'sender': forms.HiddenInput(),'reciever': forms.HiddenInput(),'product': forms.HiddenInput() }
+
+class ExchangePetitionForm(forms.ModelForm):
+
+	class Meta:
+		model = ExchangePetition
+		fields =  ['sender', 'reciever', 'product', 'hisProduct']
+		widgets = {'sender': forms.HiddenInput(),'reciever': forms.HiddenInput(),'product': forms.HiddenInput(),'hisProduct': forms.HiddenInput()  }
