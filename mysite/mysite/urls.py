@@ -36,7 +36,9 @@ urlpatterns = [
     path('sell-product/', parapop_views.sell_product, name='sell_product'),
     path('favourites/', parapop_views.favourites, name='favourites'),
     path('update_profile/', user_views.profileUpdate, name='profileUpdate'),
+    url(r'busqueda',parapop_views.busqueda, name = 'busqueda'),
     url(r'^update_product/(?P<productU>.*)/$', parapop_views.updateProduct, name='update_product'),
+    path('FAQ/', parapop_views.FAQ, name='FAQ'),
 ]
 
 if settings.DEBUG:
