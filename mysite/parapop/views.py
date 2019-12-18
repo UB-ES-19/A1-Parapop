@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from users import views as user_views
 from django.views.generic import CreateView
 from .models import ProductPost
@@ -15,6 +16,12 @@ from django.contrib.auth.decorators import login_required
 from users.models import Profile
 from users.models import Petition
 from django.shortcuts import get_object_or_404
+from functools import reduce
+from operator import or_
+from django.core import serializers
+from itertools import chain
+from datetime import date
+import jellyfish
 
 def home(request):
 	queryset = request.GET.get("user_browsed")
@@ -28,26 +35,63 @@ def home(request):
 		args = {'message_error' : "No error", 'is_error' : False}
 		return render(request, 'parapop/index.html', args)
 
-def busqueda(self):
+def busqueda(request):
 
-	#q = request.GET.get('q', '')
-
-   	#q_users = Q(username__icontains=q)
-
-   	#eventos = Evento.objects.filter(querys)
-   	#return render(request, 'template_busqueda.html', {'eventos': eventos})
-	
 	queryset = request.GET.get("q",'')
-	q_users = reduce(or_, (Q(username__icontains=i) for i in queryset))
-	l_users = User.objects.filter(q_users)
+	f_localidad = request.GET.get("loc",'')
+	f_precio_maximo = request.GET.get("max_p",'')
+	f_data = request.GET.get("date",'')
 
-	q_products = reduce(or_, (Q(title__icontains=i) for i in queryset))
-	q_products |= reduce(or_, (Q(description__icontains=i) for i in queryset))
-	q_products |= reduce(or_, (Q(tag__icontains=i) for i in queryset))
-	q_products = reduce(or_, q_products)
-	l_products = ProductPost.objects.filter(q_products)
+	l_users = User.objects.none()
+	l_products = ProductPost.objects.none()
 
-	return render(request, 'template_busqueda.html', {'users':l_users, 'products':l_products})
+	filtered = False
+	if queryset != "":
+		# -- Buscamos los usuarios en la base.
+		users = User.objects.all()
+		for user in users:
+			if jellyfish.jaro_distance(user.username, queryset) > .65:
+				l_users |= User.objects.filter(username=user.username) 
+		
+		# -- Buscamos los productos en la base y luego los filtramos.
+		products = ProductPost.objects.all()
+		for product in products:
+			if jellyfish.jaro_distance(product.title, queryset) > .60 or jellyfish.jaro_distance(product.description, queryset) > .50:
+				l_products |= ProductPost.objects.filter(title=product.title)
+
+		# -- Filtramos por localidad.
+		if f_localidad != "":
+			filtered = True
+			f_localidad_products = ProductPost.objects.none()
+			for product in l_products:
+				if jellyfish.jaro_distance(str(product.author.profile.location.first()), f_localidad) > .75:			
+					f_localidad_products |= ProductPost.objects.filter(title=product.title)
+			l_products &= f_localidad_products
+		
+		# -- Filtramos por precio.
+		if f_precio_maximo != "":
+			filtered = True
+			f_precio_products = ProductPost.objects.none()
+			for product in l_products:
+				if product.price <= float(f_precio_maximo):			
+					f_precio_products |= ProductPost.objects.filter(title=product.title)
+			l_products &= f_precio_products
+
+		# -- Filtramos por la data seleccionada.
+		if f_data != "":
+			filtered = True
+			f_data_products = ProductPost.objects.none()
+			for product in l_products:
+				if str(product.pub_date) >= f_data:			
+					f_data_products |= ProductPost.objects.filter(title=product.title)
+			l_products &= f_data_products
+
+
+	if filtered:
+		return render(request, 'parapop/search.html', {'products' : l_products, 'users':l_users})
+	else:	
+		return render(request, 'parapop/search.html', {'products' : l_products, 'users':l_users})
+
 
 def sell_product(request):
 	if request.method == 'POST':
@@ -71,6 +115,7 @@ def products(request):
 	queryset = ProductPost.objects.filter(author = request.user, purchased_by = None)
 	exchange = ExchangeProductPost.objects.filter(author = request.user, purchased_by = None)
 	return render(request, 'parapop/products.html', {'user_products' : queryset, 'exchange' : exchange})
+
 
 def other_user_products(request, username, productName, hisProductName, buyPetition, buyOrExchange):
 	if(productName != None):
@@ -144,6 +189,7 @@ def updateProduct(request,productU):
 
 def FAQ(request):
 	return render(request, 'parapop/FAQ.html')
+
 
 
 def exchangeProduct(request):
