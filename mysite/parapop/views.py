@@ -35,12 +35,20 @@ def busqueda(request):
 
 	q_products = reduce(or_, (Q(title__icontains=i) for i in queryset))
 	q_products |= reduce(or_, (Q(tag__description__icontains=i) for i in queryset))
-	l_products = ProductPost.objects.filter(q_products)	
+	l_products = ProductPost.objects.filter(q_products)
 
 	q_tags = reduce(or_, (Q(description__icontains=i) for i in queryset))
 	l_tags = Tag.objects.filter(q_tags)
 
 	return render(request, 'parapop/search.html', {'products' : l_products, 'users':l_users})
+
+def busqueda_precio(request):
+
+	return
+
+def busqueda_loc(request):
+
+	return
 
 def sell_product(request):
 	if request.method == 'POST':

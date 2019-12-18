@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/products.css' %}">
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+	<script type="text/javascript" src="{% static 'css/search.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -21,23 +22,44 @@
 			<div class="top_menu row m0">
 				<div class="container">
 		<div class="float-right">
-			<select class="lan_pack">
-				<option value="1">Todo</option>
-			<option value="1">Ropa y accesorios</option>
-				<option value="1">Deportes</option>
-				<option value="1">Motor</option>
-				<option value="1">Tenis</option>
-				<option value="1">Videojuegos</option>
-				<option value="1">Dipositivos multimedia</option>
+
+			<form action="/busqueda" method = "GET">
+				<div id = "busqueda">
+					<div class = "input-group" style="float: right">
+						{% if is_error %}
+							{{message_error}}
+						{% endif %}
+						<input name="q" placeholder="Que estas buscando?" id="buscador">
+						<!--<input type = "text" class = "form-control" placeholder="¿Buscando a alguien?" name = "user_browsed">-->
+						<span class = "input-group-list">
+							<i class = "icon icon-search"></i>
+							<button type = "submit" class="ac_btn">Buscar</button>
+					</div>
+				</div>
+			</form>
+
+			<input id="PrecioIni" class="lan_pack" style="display: none" placeholder="Precio mínimo?">
+			<input id="PrecioFi" class="lan_pack" style="display: none" placeholder="Precio máximo?">
+			<input id="Localizacion" class="lan_pack" style="display: none" placeholder="Localizacion?">
+			<form action="/busqueda_precio" method = "GET">
+				<button id="filtro_precio" type = "submit" style="display:none" class="ac_btn">Filtrar</button>
+		  </form>
+			<form action="/busqueda_loc" method = "GET">
+				<button id="filtro_loc" type = "submit" style="display:none" class="ac_btn">Filtrar</button>
+			</form>
+
+			<select class="lan_pack" id="filtros_search" onchange="admSelectCheck(this)">
+				<option value="Todo">Todo</option>
+				<option value="Ciudad">Ciudad</option>
+				<option value="Precio">Precio</option>
+				<option value="Hora">Hora</option>
 			</select>
+
+
+
 			{% if user.is_authenticated %}
 
 				<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
-				<select class="lan_pack" onchange="location = this.value ">
-          <option value="1" href="">Productos</option>
-				  <option value="{% url 'profile' %}">Personal</option>
-
-				</select>
 			{% else %}
 				<a class="ac_btn" href="/login">Iniciar Sesión</a>
 				<a class="dn_btn" href="/register">Regístrate</a>
@@ -83,7 +105,7 @@
 				    		{% csrf_token %}
 				    		{% if user in product.favUsers.all %}
 								<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Eliminar de favoritos</button></p>
-				    		{% else %}				    	
+				    		{% else %}
 					    		<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Añadir a favoritos</button></p>
 					    	{% endif %}
 				    	</form>
@@ -100,7 +122,7 @@
 		{% if users %}
 			{% for user in users %}
 				<div class="card">
-					<h1>{{user.username}}</h1> 
+					<h1>{{user.username}}</h1>
 				</div>
 			{% endfor %}
 		{% else %}
