@@ -56,7 +56,6 @@ def logout(request):
 @login_required
 def profile(request):
 	followings = Follow.objects.all()
-
 	followers_count = 0
 	followings_count = 0
 
@@ -66,7 +65,20 @@ def profile(request):
 		elif(relation.follower.username == request.user.username):
 			followings_count += 1
 
-	args = {'followers_count' : followers_count, 'followings_count' : followings_count}
+	myProducts = ProductPost.objects.filter(author = request.user)
+	myExchangeProducts = ExchangeProductPost.objects.filter(author = request.user)
+	usersWithFavs = []
+
+	for product in myProducts:
+		for user in product.favUsers.all():
+			if user not in usersWithFavs:
+				usersWithFavs.append(user)
+	for product in myExchangeProducts:
+		for user in product.favUsers.all():
+			if user not in usersWithFavs:
+				usersWithFavs.append(user)
+
+	args = {'followers_count' : followers_count, 'followings_count' : followings_count, 'usersWithFavs' : len(usersWithFavs)}
 
 	return render(request, 'users/profile.html', args)
 
