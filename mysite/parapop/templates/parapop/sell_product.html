@@ -21,15 +21,7 @@
 			<div class="top_menu row m0">
 				<div class="container">
 		<div class="float-right">
-			<select class="lan_pack">
-				<option value="1">Todo</option>
-			<option value="1">Ropa y accesorios</option>
-				<option value="1">Deportes</option>
-				<option value="1">Motor</option>
-				<option value="1">Tenis</option>
-				<option value="1">Videojuegos</option>
-				<option value="1">Dipositivos multimedia</option>
-			</select>
+
 			{% if user.is_authenticated %}
 
 				<a class="ac_btn" href="{% url 'logout' %}">Cerrar Sesion</a>
@@ -54,8 +46,7 @@
 			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 				<ul class="nav navbar-nav menu_nav ml-auto">
 					<li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Mis productos</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Preguntas Frecuentes</a></li>
+					<li class="nav-item"><a class="nav-link" href="/FAQ">Preguntas Frecuentes</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="nav-item"><a href="#" class="search"><i class="lnr lnr-magnifier"></i></a></li>
