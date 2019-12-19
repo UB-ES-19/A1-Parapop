@@ -26,13 +26,14 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('home/', parapop_views.home, name='home'),
     path('register/', user_views.register, name='register'),
     path('login/', log_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', log_views.LogoutView.as_view(template_name='parapop/index.html'), name='logout'),
     path('', include('parapop.urls')),
     path('profile/', user_views.profile, name='profile'),
     path('products/', parapop_views.products, name='products'),
-    url(r'profile/(?P<username>[a-zA-Z0-9]+)$', user_views.get_user_profile),
+    url(r'profile/(?P<username>[a-zA-Z0-9]+)$', user_views.get_user_profile, name='view_profile'),
     path('sell-product/', parapop_views.sell_product, name='sell_product'),
     path('favourites/', parapop_views.favourites, name='favourites'),
     path('update_profile/', user_views.profileUpdate, name='profileUpdate'),

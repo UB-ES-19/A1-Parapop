@@ -49,13 +49,17 @@
       	<nav class="navbar navbar-expand-lg navbar-light">
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
-			<a class="navbar-brand-logo_h-titulo" href="http://localhost:8000/" >Parapop</a>
+			<a class="navbar-brand-logo_h-titulo" href="{% url 'home' %}" >Parapop</a>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 				<ul class="nav navbar-nav menu_nav ml-auto">
 					{% if user.is_authenticated %}
+					<li class="nav-item"><a class="nav-link" href="{% url 'exchange_product' %}">Intercambiar producto</a></li>
+					<li class="nav-item"><a class="nav-link" href="{% url 'sell_product' %}">Vender producto</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Mis productos</a></li>
 					{% else %}
+					<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Intercambiar producto</a></li>
+					<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Vender producto</a></li>
 					<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Mis productos</a></li>
 					{% endif %}
 					<li class="nav-item"><a class="nav-link" href="/FAQ">Preguntas Frecuentes</a></li>

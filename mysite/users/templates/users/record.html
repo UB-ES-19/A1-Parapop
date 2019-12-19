@@ -41,12 +41,20 @@
 				<nav class="navbar navbar-expand-lg navbar-light">
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
-			<a class="navbar-brand-logo_h-titulo" href="http://localhost:8000/" >Parapop</a>
+			<a class="navbar-brand-logo_h-titulo" href="{% url 'home' %}" >Parapop</a>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 				<ul class="nav navbar-nav menu_nav ml-auto">
+					{% if user.is_authenticated %}
+					<li class="nav-item"><a class="nav-link" href="{% url 'exchange_product' %}">Intercambiar producto</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'sell_product' %}">Vender producto</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'FAQ' %}">Preguntas Frecuentes</a></li>
+					<li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Mis productos</a></li>
+					{% else %}
+					<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Intercambiar producto</a></li>
+					<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Vender producto</a></li>
+					<li class="nav-item"><a class="nav-link" href="{%url 'login' %}">Mis productos</a></li>
+					{% endif %}
+					<li class="nav-item"><a class="nav-link" href="/FAQ">Preguntas Frecuentes</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="nav-item"><a href="#" class="search"><i class="lnr lnr-magnifier"></i></a></li>
@@ -63,7 +71,7 @@
 
 		<b class="subtitulo">Productos comprados o recibidos por intercambio</b>
 		{% for product in purchasedProducts %}
-			<div class="card">
+			<div class="card" align="left">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
 			    <h1>{{product.title}}</h1>
 			    <p>Comprado a {{product.author}}</p>
@@ -91,7 +99,7 @@
 			</div>
 		{% endfor %}
 		{% for product in recivedExchangeProducts %}
-			<div class="card">
+			<div class="card" align="left">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
 			    <h1>{{product.title}}</h1>
 			    <p>Intercambiado a {{product.author}}</p>
@@ -122,7 +130,7 @@
 
 		<b class="subtitulo">Productos vendidos o entregados para intercambio</b>
 		{% for product in soldProducts %}
-			<div class="card">
+			<div class="card" align="left">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
 			    <h1>{{product.title}}</h1>
 			    <p>Comprado por {{product.purchased_by}}</p>
@@ -139,7 +147,7 @@
 			</div>
 		{% endfor %}
 		{% for product in givenExchangeProducts %}
-			<div class="card">
+			<div class="card" align="left">
 				<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
 			    <h1>{{product.title}}</h1>
 			    <p>Intercambiado a {{product.purchased_by}}</p>
