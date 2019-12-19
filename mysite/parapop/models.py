@@ -13,6 +13,7 @@ class ProductPost(models.Model):
 	author = models.ForeignKey(User, on_delete= models.CASCADE, blank = True)
 	productPic = models.FileField(upload_to = 'product_pics/')
 	favUsers = models.ManyToManyField(User, related_name = 'favUsers', blank = True)
+	pub_date = models.DateField(auto_now_add=True, null=True, blank=True)
 	tag = models.ManyToManyField(Tag) 
 
 	def __str__(self):
