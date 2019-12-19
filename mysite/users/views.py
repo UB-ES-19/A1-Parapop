@@ -115,13 +115,13 @@ def get_user_profile(request, username):
 				return render(request, 'users/user_profile.html', args)
 		elif (request.POST.get("profile_user")):
 			username = request.POST.get("profile_user")
-			return parapop_views.other_user_products(request, username, None,None, False, True)
+			return parapop_views.other_user_products(request, username, None,None, False, True, "user")
 		elif (request.POST.get("favProduct")):
 			productName = request.POST.get("favProduct")
-			return parapop_views.other_user_products(request, username, productName, None, False, False)
+			return parapop_views.other_user_products(request, username, productName, None, False, True, "user")
 		elif (request.POST.get("buyProduct")):
 			productName = request.POST.get("buyProduct")
-			return parapop_views.other_user_products(request, username, productName, None, True, False)
+			return parapop_views.other_user_products(request, username, productName, None, True, True, "user")
 		elif (request.POST.get("exchangeProduct")):
 			productName = request.POST.get("exchangeProduct")
 			product = ExchangeProductPost.objects.filter(title = productName)[0]
@@ -131,7 +131,7 @@ def get_user_profile(request, username):
 			text = request.POST.get("product").split(",")
 			yourProduct = text[1]
 			hisProduct = text[0]
-			return parapop_views.other_user_products(request, username, yourProduct, hisProduct, True, False)
+			return parapop_views.other_user_products(request, username, yourProduct, hisProduct, True, False, "user")
 		else:
 			if form.is_valid():
 

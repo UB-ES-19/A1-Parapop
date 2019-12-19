@@ -80,60 +80,84 @@
 			</div>
 	</header>
 	<!--================Header Menu Area =================-->
-
-	<body>
-		{% if products %}
-			{% for product in products %}
-				<div class="card">
-					<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
-				    <h1>{{product.title}}</h1>
-				    {% for tag in product.tag.all %}
-				    	<h6>{{tag}}</h6>
-				    {% endfor %}
-				    <p class="price">{{product.price}} €</p>
-				    <p>{{product.description}}</p>
-				    {% if fav %}
+	<div>
+		<body>
+			{% if products %}
+				{% for product in products %}
+					<div class="card">
+						<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+					    <h1>{{product.title}}</h1>
+					    {% for tag in product.tag.all %}
+					    	<h6>{{tag}}</h6>
+					    {% endfor %}
+					    <p class="price">{{product.price}} €</p>
+					    <p>{{product.description}}</p>
 				    	<form method= "POST">
 				    		{% csrf_token %}
+				    		{{petitionForm}}
 				    		{% if user in product.favUsers.all %}
-								<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Eliminar de favoritos</button></p>
-				    		{% else %}
-					    		<p><button type = "submit" name = "favProduct" value = "{{product.title}}">Añadir a favoritos</button></p>
+								<p><button type = "submit" name = "favProduct" value = "{{product.title}},{{product.author.username}}">Eliminar de favoritos</button></p>
+				    		{% else %}				    	
+					    		<p><button type = "submit" name = "favProduct" value = "{{product.title}},{{product.author.username}}">Añadir a favoritos</button></p>
+					    	{% endif %}
+					    	{% if product in petitions %}
+					    		<p><button type = "submit" background_color="grey" name = "buyProduct" value = "{{product.title}},{{product.author.username}}" disabled>Solicitud enviada</button></p>
+					    	{% else %}
+					    		<p><button type = "submit" name = "buyProduct" value = "{{product.title}},{{product.author.username}}">Comprar</button></p>
 					    	{% endif %}
 				    	</form>
-				    {% else %}
-				       	<a href="{% url 'update_product'  productU=product.title %}">Editar</a>
-				    {% endif %}
+					</div>
+				{% endfor %}
+			{% endif %}
+			{% if productsE %}
+				{% for product in productsE %}
+					<div class="card">
+						<img src="{{product.productPic.url}}" alt="Ropa y accesorios" style="width:100%">
+					    <h1>{{product.title}}</h1>
+					    {% for tag in product.tag.all %}
+					    	<h6>{{tag}}</h6>
+					    {% endfor %}
+					    <p class="price">Producto para intercambiar</p>
+					    <p>{{product.description}}</p>
+				    	<form method= "POST">
+				    		{% csrf_token %}
+				    		{{petitionForm}}
+				    		{% if user in product.favUsers.all %}
+								<p><button type = "submit" name = "favProduct" value = "{{product.title}},{{product.author.username}}">Eliminar de favoritos</button></p>
+				    		{% else %}				    	
+					    		<p><button type = "submit" name = "favProduct" value = "{{product.title}},{{product.author.username}}">Añadir a favoritos</button></p>
+					    	{% endif %}
+					    	{% if product in petitions %}
+					    		<p><button type = "submit" background_color="grey" name = "exchangeProduct" value = "{{product.title}},{{product.author.username}}" disabled>Solicitud enviada</button></p>
+					    	{% else %} 
+					    		<p><button type = "submit" name = "exchangeProduct" value = "{{product.title}},{{product.author.username}}">Intercambiar</button></p>
+					    	{% endif %}
+				    	</form>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div>
+					<h1 align="center">No hay productos que mostrar!</h1>
 				</div>
-			{% endfor %}
-		{% else %}
-			<div>
-				<h1 align="center">No hay productos que mostrar!</h1>
-			</div>
-		{% endif %}
-		{% if users %}
-			{% for user in users %}
-				<div class="card">
-				  	<img class="rounded-circle account-img" src="{{ user.profile.image.url }}" width = "200px" height = "200px">
-		 		  	<h1>{{user.username}}</h1>
-					<p>Seguidores: {{followers_count}} Seguidos: {{followings_count}}</p>
-					<form method = "POST">
-						{% csrf_token %}
-						{{form}}
-						{% if user.is_authenticated %}
-							{% if already_following %}
-								<button name = "unfollow" value = 1 type="submit">Unfollow</button>
-							{% else %}
-								<button name = "follow" value = 1 type="submit">Follow</button>
+			{% endif %}
+			{% if users %}
+				{% for user in users %}
+					<div class="card">
+					  	<img class="rounded-circle account-img" src="{{ user.profile.image.url }}" width = "200px" height = "200px">
+			 		  	<h1>{{user.username}}</h1>
+						<form method = "POST">
+							{% csrf_token %}
+							{{form}}
+							{% if user.is_authenticated %}
+								<button name = "view_profile" value = {{user.username}} type="submit">Ver perfil</button>
 							{% endif %}
-						{% endif %}
-						<p><button name ="profile_user" value = "{{user.username}}" type = "submit">Productos</button></p>
-					</form>
+						</form>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div>
+					<h1 align="center">No hay usuarios que mostrar!</h1>
 				</div>
-			{% endfor %}
-		{% else %}
-			<div>
-				<h1 align="center">No hay usuarios que mostrar!</h1>
-			</div>
-		{% endif %}
-	</body>
+			{% endif %}
+		</body>
+	</div>
